@@ -22,10 +22,17 @@ jobs:
             cd /www/wwwroot/parkhere.ourproject.my.id
             git stash
             git pull origin main
-            sudo composer install
+            sudo --ignore-platform-req=ext-fileinfo
+            ${{ secrets.PASSWORD }}
             sudo php artisan db:renew --force
+            ${{ secrets.PASSWORD }}
             sudo php artisan db:import
+            ${{ secrets.PASSWORD }}
             sudo php artisan optimize
+            ${{ secrets.PASSWORD }}
             sudo php artisan config:cache
+            ${{ secrets.PASSWORD }}
             sudo php artisan route:cache
+            ${{ secrets.PASSWORD }}
             sudo php artisan view:cache
+            ${{ secrets.PASSWORD }}
