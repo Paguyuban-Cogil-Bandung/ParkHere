@@ -1,58 +1,31 @@
 name: Deploy ParkHere
 
-# on: [workflow_dispatch]
-on:
-  push:
-    branches:
-    - master
+on: [workflow_dispatch]
+# on:
+#   push:
+#     branches:
+#     - master
 
 jobs:
   web-dev-sync:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v3
-
-      - name: 👉 Use PHP 8.3
-        uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      - name: Deploying ❤❤
+        uses: appleboy/ssh-action@v1.2.0
         with:
-          php-version: '8.3'
-
-      - name: 🏙 Create env file
-        run: |
-          echo "${{ secrets.ENV_PRODUCTION }}" > .env
-          
-      - name: 🔨 Build Composer
-        run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --ignore-platform-reqs
-      
-      - name: 🍪 Clear Config Cache
-        run: |
-          php artisan config:cache
-          rm bootstrap/cache/config.php
-
-      - name: 🔑 Generate Laravel Key
-        run: |
-          php artisan key:generate
-
-      - name: 🔌 Prepare Files for Public
-        run: |
-          cp -rf public/* .
-          mv public.php index.php
-
-      - name: 💾 Give Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
-
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.HOST }}
+          host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
-          protocol: ftp
           port: ${{ secrets.PORT }}
-          exclude: |
-            **/.git/**
-            **/.github/**
-            **/node_modules/**
+          script: |
+            cd /www/wwwroot/parkhere.ourproject.my.id
+            git stash
+            git pull origin main
+            composer install
+            php artisan db:renew --force
+            php artisan db:import
+            php artisan optimize
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
