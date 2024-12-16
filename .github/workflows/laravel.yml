@@ -21,11 +21,11 @@ jobs:
           script: |
             cd /www/wwwroot/parkhere.ourproject.my.id
             git stash
-            git pull origin main
-            composer install --ignore-platform-req=ext-fileinfo
-            php artisan db:renew --force
-            php artisan db:import
-            php artisan optimize
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+            echo "${{ secrets.PASSWORD }}" | sudo -S git pull origin main
+            echo "${{ secrets.PASSWORD }}" | sudo -S composer install --ignore-platform-req=ext-fileinfo
+            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan db:renew --force
+            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan db:import
+            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan optimize
+            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan config:cache
+            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan route:cache
+            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan view:cache
