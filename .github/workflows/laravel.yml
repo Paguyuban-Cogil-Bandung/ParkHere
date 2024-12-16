@@ -40,11 +40,15 @@ jobs:
       - name: 💾 Give Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
 
-      - name: Deploying ❤❤
-        uses: appleboy/ssh-action@v1.2.0
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          host: ${{ secrets.HOST }}
+          server: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
+          protocol: ftp
           port: ${{ secrets.PORT }}
-          script: whoami
+          exclude: |
+            **/.git/**
+            **/.github/**
+            **/node_modules/**
