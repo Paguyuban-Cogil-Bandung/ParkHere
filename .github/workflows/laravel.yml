@@ -23,8 +23,6 @@ jobs:
             echo "${{ secrets.PASSWORD }}" | sudo -S git stash
             echo "${{ secrets.PASSWORD }}" | sudo -S git pull origin main
             echo "${{ secrets.PASSWORD }}" | sudo -S composer install --ignore-platform-req=ext-fileinfo
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan db:renew --force
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan db:import
             echo "${{ secrets.PASSWORD }}" | sudo -S php artisan optimize
             echo "${{ secrets.PASSWORD }}" | sudo -S php artisan config:cache
             echo "${{ secrets.PASSWORD }}" | sudo -S php artisan route:cache
