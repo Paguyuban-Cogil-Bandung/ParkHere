@@ -20,6 +20,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /www/wwwroot/parkhere.ourproject.my.id
+            echo "${{ secrets.PASSWORD }}" | sudo -S git stash
+            echo "${{ secrets.PASSWORD }}" | sudo -S git pull origin main
             echo "${{ secrets.PASSWORD }}" | sudo -S chmod +x install.sh
             echo "${{ secrets.PASSWORD }}" | sudo -S ./install.sh
 
