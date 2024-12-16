@@ -1,10 +1,10 @@
 name: Deploy ParkHere
 
-on: [workflow_dispatch]
-# on:
-#   push:
-#     branches:
-#     - master
+# on: [workflow_dispatch]
+on:
+  push:
+    branches:
+    - master
 
 jobs:
   web-dev-sync:
@@ -21,11 +21,13 @@ jobs:
           script: |
             cd /www/wwwroot/parkhere.ourproject.my.id
             git stash
-            echo "${{ secrets.PASSWORD }}" | sudo -S git pull origin main
-            echo "${{ secrets.PASSWORD }}" | sudo -S composer install --ignore-platform-req=ext-fileinfo
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan db:renew --force
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan db:import
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan optimize
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan config:cache
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan route:cache
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan view:cache
+            git pull
+            echo "${{ secrets.PASSWORD }}" | sudo -S echo && sudo -s
+            git pull origin main
+            composer install --ignore-platform-reqs
+            php artisan db:renew --force
+            php artisan db:import
+            php artisan optimize
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
