@@ -4,7 +4,7 @@ name: Deploy ParkHere
 on:
   push:
     branches:
-    - master
+    - main
 
 jobs:
   web-dev-sync:
