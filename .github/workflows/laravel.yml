@@ -26,6 +26,7 @@ jobs:
             echo "${{ secrets.PASSWORD }}" | sudo -S sudo php artisan config:cache
             echo "${{ secrets.PASSWORD }}" | sudo -S sudo php artisan route:cache
             echo "${{ secrets.PASSWORD }}" | sudo -S sudo php artisan view:cache
+            echo "${{ secrets.PASSWORD }}" | sudo -S sudo echo "${{ secrets.ENV_PRODUCTION }}" > .env
             echo "${{ secrets.PASSWORD }}" | sudo -S sudo php artisan key:generate
             echo "${{ secrets.PASSWORD }}" | sudo -S sudo cp -rf public/* .
             echo "${{ secrets.PASSWORD }}" | sudo -S sudo mv public.php index.php
