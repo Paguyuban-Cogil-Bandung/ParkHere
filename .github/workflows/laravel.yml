@@ -20,16 +20,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /www/wwwroot/parkhere.ourproject.my.id
-            echo "${{ secrets.PASSWORD }}" | sudo -S git stash
-            echo "${{ secrets.PASSWORD }}" | sudo -S git pull origin main
-            echo "${{ secrets.PASSWORD }}" | sudo -S composer install --ignore-platform-reqs
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan optimize
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan config:cache
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan route:cache
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan view:cache
-            echo "${{ secrets.PASSWORD }}" | sudo -S echo "${{ secrets.ENV_PRODUCTION }}" > .env
-            echo "${{ secrets.PASSWORD }}" | sudo -S php artisan key:generate
-            echo "${{ secrets.PASSWORD }}" | sudo -S cp -rf public/* .
-            echo "${{ secrets.PASSWORD }}" | sudo -S mv public.php index.php
-            echo "${{ secrets.PASSWORD }}" | sudo -S chmod -R 777 storage bootstrap/cache
+            echo "${{ secrets.PASSWORD }}" | sudo -S chmod +x install.sh
+            echo "${{ secrets.PASSWORD }}" | sudo -S ./install.sh
 
