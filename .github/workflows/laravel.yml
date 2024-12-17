@@ -22,4 +22,5 @@ jobs:
             cd /www/wwwroot/parkhere.ourproject.my.id
             echo "${{ secrets.PASSWORD }}" | sudo -S git stash
             echo "${{ secrets.PASSWORD }}" | sudo -S git pull origin main
+            echo "${{ secrets.PASSWORD }}" | sudo -S composer install
             php artisan route:list
