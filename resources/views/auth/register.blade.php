@@ -9,7 +9,7 @@
                     class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
                     <div class="container-fluid">
                         <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="{{route('welcome')}}">
-                            <img src="{{ asset('/img') }}/logo.png" class="img-fluid" style="height: 2em;" alt="main_logo">
+                            <img src="{{ asset('/assets') }}/guest/images/logo.png" class="img-fluid" style="height: 2em;" alt="main_logo">
                         </a>
                         <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
@@ -23,27 +23,47 @@
                         <div class="collapse navbar-collapse" id="navigation">
                             <ul class="navbar-nav mx-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link d-flex align-items-center me-2 active" aria-current="page" href="https://argon-dashboard-laravel.creative-tim.com/dashboard">
-                                        <i class="fa fa-chart-pie opacity-6 text-dark me-1"></i>
-                                        Dashboard
+                                    <a class="nav-link d-flex align-items-center me-2 active" aria-current="page"
+                                        href="">
+                                        <i class="fa fa-house opacity-6 text-dark me-1"></i>
+                                        Home
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="https://argon-dashboard-laravel.creative-tim.com/register">
+                                    <a class="nav-link me-2" href="">
+                                        <i class="fa fa-circle-info opacity-6 text-dark me-1"></i>
+                                        Tentan Kami
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link me-2" href="">
+                                        <i class="fas fa-location-dot opacity-6 text-dark me-1"></i>
+                                        Lokasi
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link me-2" href="">
+                                        <i class="fas fa-life-ring opacity-6 text-dark me-1"></i>
+                                        Pelayanan
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link me-2" href="">
                                         <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
-                                        Sign Up
+                                        Kontak
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="https://argon-dashboard-laravel.creative-tim.com/login">
-                                        <i class="fas fa-key opacity-6 text-dark me-1"></i>
-                                        Sign In
+                                    <a class="nav-link me-2" href="">
+                                        <i class="fas fa-quote-left opacity-6 text-dark me-1"></i>
+                                        Testimoni
                                     </a>
                                 </li>
                             </ul>
-                            <ul class="navbar-nav d-lg-block d-none">
-                                <li class="nav-item">
-                                    <a href="{{route('login')}}" class="btn btn-sm mb-0 me-1 btn-primary">Login</a>
+                            <ul class="navbar-nav d-sm-block sm-mb-2">
+                                <li class="nav-item d-flex justify-content-center">
+                                    <a href="{{route('login')}}" class="btn btn-sm mb-0 me-1 btn-primary-outline">Login</a>
+                                    <a href="{{route('register')}}" class="btn btn-sm mb-0 me-1 btn-primary">Register</a>
                                 </li>
                             </ul>
                         </div>
