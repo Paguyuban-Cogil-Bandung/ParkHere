@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'petugas' => \App\Http\Middleware\Petugas::class,
             'pelanggan' => \App\Http\Middleware\Pelanggan::class,
             'dontback' => \App\Http\Middleware\DontBack::class,
+            \App\Http\Middleware\Cors::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

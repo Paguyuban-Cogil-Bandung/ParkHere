@@ -11,6 +11,7 @@
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css">
     <!-- Nucleo Icons -->
     <link href="{{ asset('/assets') }}/css/nucleo-icons.css" rel="stylesheet" />
     <link href="{{ asset('/assets') }}/css/nucleo-svg.css" rel="stylesheet" />
@@ -62,6 +63,8 @@
     <script src="{{ asset('/assets') }}/js/core/bootstrap.min.js"></script>
     <script src="{{ asset('/assets') }}/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="{{ asset('/assets') }}/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -75,7 +78,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('/assets') }}/js/argon-dashboard.js"></script>
-    @stack('js');
+    @yield('js');
 </body>
 
 </html>
