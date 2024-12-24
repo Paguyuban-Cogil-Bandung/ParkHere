@@ -107,20 +107,6 @@
             ],
             
         });
-
-        const minEl = document.querySelector('#status-filter');
-        const maxEl = document.querySelector('#keyboard');
-        
-        
-        // Custom range filtering function
-        
-        // Changes to the inputs will trigger a redraw to update the table
-        // minEl.addEventListener('input', function () {
-        //     tables.draw();
-        // });
-        maxEl.addEventListener('input', function (e) {
-            table.draw();
-        });
     
         // Export to Excel
     $('#export-excel').on('click', function() {
