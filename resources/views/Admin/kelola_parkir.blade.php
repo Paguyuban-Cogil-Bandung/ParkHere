@@ -10,11 +10,11 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h6>User List</h6>
+                        <h6>Kelola Parkir</h6>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive ps-4 pe-4">
-                            <table id="users" class="table align-items-center mb-0">
+                            <table id="parkir" class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -38,7 +38,7 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    new DataTable('#users', {
+    new DataTable('#parkir', {
     ajax: 'https://parkhere-backend.ourproject.my.id/user/list',
     columns: [
         { data: 'id' },
@@ -60,11 +60,10 @@
     ],
     processing: true,
     serverSide: true,
-    order: {},
 });
 
 // Event delegation for dynamically created buttons
-$('#users').on('click', '.update-btn', function (e) {
+$('#parkir').on('click', '.update-btn', function (e) {
     e.preventDefault();
     const userId = $(this).data('id');
 
@@ -109,7 +108,7 @@ $('#users').on('click', '.update-btn', function (e) {
                                 'success'
                             );
                             // Reload the DataTable
-                            $('#users').DataTable().ajax.reload();
+                            $('#parkir').DataTable().ajax.reload();
                         },
                         error: function (xhr, status, error) {
                             Swal.fire(
@@ -132,7 +131,7 @@ $('#users').on('click', '.update-btn', function (e) {
     });
 });
 
-$('#users').on('click', '.delete-btn', function (e) {
+$('#parkir').on('click', '.delete-btn', function (e) {
     e.preventDefault();
     const userId = $(this).data('id');
     const userName = $(this).data('name');
@@ -160,7 +159,7 @@ $('#users').on('click', '.delete-btn', function (e) {
                         'success'
                     );
                     // Reload the DataTable
-                    $('#users').DataTable().ajax.reload();
+                    $('#parkir').DataTable().ajax.reload();
                 },
                 error: function (xhr, status, error) {
                     // Handle error response

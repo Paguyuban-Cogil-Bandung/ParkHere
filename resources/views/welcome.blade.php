@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <link rel="icon" type="image/png" href="{{ asset('/assets') }}/guest/images/Small_Logo.png">
     <title>
-        Argon Dashboard 2 by Creative Tim
+        ParkHere
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -400,8 +400,8 @@
                       <h2 class="ftco-heading-2">Have a Questions?</h2>
                       <div class="block-23 mb-3">
                         <ul>
-                          <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-                          <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+                          <li><span class="icon icon-map-marker"></span><span class="text">Jl. Dipati Ukur No.112-116, Lebakgede, Kecamatan Coblong, Kota Bandung, Jawa Barat 40132</span></li>
+                          <li><a href="#"><span class="icon icon-phone"></span><span class="text">+62 392 3929 210</span></a></li>
                           <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
                         </ul>
                       </div>
