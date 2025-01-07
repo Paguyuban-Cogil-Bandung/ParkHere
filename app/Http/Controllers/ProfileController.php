@@ -16,8 +16,19 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
+        $user = $request->user();
+        $view = 'profile.edit';
+
+        if (Auth::user()->usertype === 'admin') {
+            $view = 'Admin.profile';
+        } elseif (Auth::user()->usertype === 'petugas') {
+            $view = 'Petugas.profile';
+        } elseif (Auth::user()->usertype === 'pelanggan') {
+            $view = 'Pelanggan.profile';
+        }
+
+        return view($view, [
+            'user' => $user,
         ]);
     }
 
@@ -27,14 +38,9 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::back()->with('status', 'profile-updated');
     }
 
     /**

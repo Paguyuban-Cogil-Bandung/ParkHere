@@ -3,8 +3,12 @@
     @include('Admin.menu')
 @endsection
 
+@section('title')
+    User Management
+@endsection
+
 @section('content')
-    @include('layout.navbars.auth.topnav', ['title' => 'Tables'])
+    @include('layout.navbars.auth.topnav', ['title' => 'User Management'])
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">

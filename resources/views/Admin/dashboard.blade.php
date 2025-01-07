@@ -3,6 +3,11 @@
 @section('menu')
     @include('Admin.menu')
 @endsection
+
+@section('title')
+    Dashboard
+@endsection
+
 <!-- content -->
 @section('content')
     @include('layout.navbars.auth.topnav', ['title' => 'Dashboard'])

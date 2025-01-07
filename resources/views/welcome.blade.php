@@ -158,7 +158,7 @@
                                       <div class="services w-100 text-center">
                                         <div class="icon d-flex align-items-center justify-content-center"><span class="fas fa-money-bill"></span></div>
                                         <div class="text w-100">
-                                          <h3 class="heading mb-2">Bekerjasama dengan Pemerintah Daerah</h3>
+                                          <h3 class="heading mb-2">Harga Terjangkau dan Transparan</h3>
                                         </div>
                                       </div>      
                                     </div>
@@ -166,7 +166,7 @@
                                       <div class="services w-100 text-center">
                                         <div class="icon d-flex align-items-center justify-content-center"><span class="fa-solid fa-shield-halved"></span></div>
                                         <div class="text w-100">
-                                          <h3 class="heading mb-2">Bekerjasama dengan Pemerintah Daerah</h3>
+                                          <h3 class="heading mb-2">Keamanan dan Kenyamanan Parkir</h3>
                                         </div>
                                       </div>      
                                     </div>

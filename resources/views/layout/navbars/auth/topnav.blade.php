@@ -10,8 +10,8 @@
             </ol>
             <h6 class="font-weight-bolder text-white mb-0">{{ $title }}</h6>
         </nav>
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+        <div class="collapse navbar-collapse mt-sm-0 me-md-0 me-sm-4" id="navbar">
+            <div class="ms-md-auto pe-md-4 d-flex align-items-center">
             </div>
             <ul class="navbar-nav justify-content-end">
                 <li class="nav-item dropdown pe-2 ml-2 d-flex align-items-center">
@@ -60,4 +60,15 @@
         </div>
     </div>
 </nav>
+@if(Auth::user()->usertype === 'petugas')
+<div class="container-fluid py-0 pt-0 pb-0">
+    <div class="row">
+        <div class="mb-xl-0">
+            <div class="card">
+                <span class="text-sm px-2 py-2"><i class="fa fa-location-dot"></i> Lokasi Penugasan : <b>ParkHere Unikom Bandung</b></span> 
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 <!-- End Navbar -->

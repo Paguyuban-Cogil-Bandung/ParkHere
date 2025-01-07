@@ -3,6 +3,11 @@
 @section('menu')
     @include('Pelanggan.menu')
 @endsection
+
+@section('title')
+    Dashboard
+@endsection
+
 <!-- content -->
 @section('content')
     @include('layout.navbars.auth.topnav', ['title' => 'Dashboard'])
@@ -484,3 +489,34 @@
         });
     </script>
 @endpush
+@section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (navigator.geolocation) {
+            // Function to fetch and log location
+            const fetchLocation = () => {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+                    },
+                    (error) => {
+                        console.error('Error fetching location:', error.message);
+                        alert('Unable to fetch location. Please allow location access.');
+                    }
+                );
+            };
+
+            // Fetch location initially
+            fetchLocation();
+
+            // Set an interval to fetch location every 1 second (1000ms)
+            setInterval(fetchLocation, 1000);
+        } else {
+            alert('Geolocation is not supported by your browser.');
+        }
+    });
+</script>
+@endsection

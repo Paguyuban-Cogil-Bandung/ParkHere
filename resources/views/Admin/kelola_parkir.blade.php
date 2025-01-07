@@ -3,8 +3,12 @@
     @include('Admin.menu')
 @endsection
 
+@section('title')
+    Kelola Parkir
+@endsection
+
 @section('content')
-    @include('layout.navbars.auth.topnav', ['title' => 'Tables'])
+    @include('layout.navbars.auth.topnav', ['title' => 'Kelola Parkir'])
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
