@@ -106,12 +106,6 @@
                     </div>
                     <div class="card-body p-3">
                         <iframe width="100%" height="315" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                var iframe = document.querySelector('iframe');
-                                iframe.src += "?autoplay=1";
-                            });
-                        </script>
                     </div>
                 </div>
             </div>

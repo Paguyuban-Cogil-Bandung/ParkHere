@@ -6,14 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class DashboardController extends Controller
+class AktivitasController extends Controller
 {
     public function view(Request $request): View
     {
-        return view('Pelanggan.dashboard');
+        return view('Pelanggan.aktivitas');
     }
-    public function lokasi(Request $request): View
-    {
-        return view('Pelanggan.detail_lokasi');
-    }
+    
 }
