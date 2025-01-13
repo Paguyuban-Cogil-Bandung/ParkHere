@@ -74,7 +74,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link me-2" href="">
                                         <i class="fa fa-circle-info opacity-6 text-dark me-1"></i>
-                                        Tentan Kami
+                                        Tentang Kami
                                     </a>
                                 </li>
                                 <li class="nav-item">
