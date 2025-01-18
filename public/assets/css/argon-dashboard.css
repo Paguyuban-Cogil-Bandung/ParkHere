@@ -4257,7 +4257,7 @@ textarea.form-control-lg {
   color: #67748e;
   text-align: inherit;
   white-space: nowrap;
-  background-color: transparent;
+  /* background-color: transparent; */
   border: 0;
 }
 .dropdown-item:hover, .dropdown-item:focus {
@@ -4292,35 +4292,6 @@ textarea.form-control-lg {
   display: block;
   padding: 0.3rem 1rem;
   color: #67748e;
-}
-
-.dropdown-menu-dark {
-  color: #dee2e6;
-  background-color: #343a40;
-  border-color: transparent;
-}
-.dropdown-menu-dark .dropdown-item {
-  color: #dee2e6;
-}
-.dropdown-menu-dark .dropdown-item:hover, .dropdown-menu-dark .dropdown-item:focus {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.15);
-}
-.dropdown-menu-dark .dropdown-item.active, .dropdown-menu-dark .dropdown-item:active {
-  color: #67748e;
-  background-color: transparent;
-}
-.dropdown-menu-dark .dropdown-item.disabled, .dropdown-menu-dark .dropdown-item:disabled {
-  color: #adb5bd;
-}
-.dropdown-menu-dark .dropdown-divider {
-  border-color: transparent;
-}
-.dropdown-menu-dark .dropdown-item-text {
-  color: #dee2e6;
-}
-.dropdown-menu-dark .dropdown-header {
-  color: #adb5bd;
 }
 
 .btn-group,
