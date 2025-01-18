@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-lg-6 col-md-12 d-flex justify-content-center justify-content-lg-end">
                                 <div class="d-flex justify-content-center">
-                                    <a href="" class="btn btn-sm btn-info m-1">Detail</a>
+                                    <a href="{{route('detail_transaksi')}}" class="btn btn-sm btn-info m-1">Detail</a>
                                     <a href="" class="btn btn-sm btn-warning m-1">Bayar</a>
                                 </div>
                             </div>

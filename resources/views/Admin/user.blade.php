@@ -14,7 +14,10 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h6>User List</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6>User List</h6>
+                            <button id="add-user-btn" class="add-btn btn btn-primary btn-sm" >Tambah<i class="fe fe-add"></i></button>
+                        </div>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive ps-4 pe-4">
@@ -40,6 +43,7 @@
 @endsection
 
 @section('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.2.0/bcrypt.js" async></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     new DataTable('#users', {
@@ -48,7 +52,21 @@
         { data: 'id' },
         { data: 'name' },
         { data: 'email' },
-        { data: 'usertype' },
+        {
+            data: 'usertype',
+            render: function (data, type, row) {
+                // Determine the text color based on usertype
+                let Bgclass = '';
+                if (data === 'admin') {
+                    Bgclass = 'primary'; // Red for admin
+                } else if (data === 'pelanggan') {
+                    Bgclass = 'info'; // Blue for pelanggan
+                } else if (data === 'petugas') {
+                    Bgclass = 'secondary'; // Yellow for petugas
+                }
+                return `<span class="p-2 bg-${Bgclass} rounded text-white">${data}</span>`;
+            }
+        },
         { data: 'created_at' },
         {
             data: null,
@@ -81,28 +99,63 @@ $('#users').on('click', '.update-btn', function (e) {
             Swal.fire({
                 title: 'Edit User',
                 html: `
-                    <input id="swal-input-name" class="swal2-input" placeholder="Name" value="${user.name}">
-                    <input id="swal-input-email" class="swal2-input" placeholder="Email" value="${user.email}">
-                    <input id="swal-input-usertype" class="swal2-input" placeholder="User  Type" value="${user.usertype}">
+                <div class="mb-3">
+                    <label for="edit-user-name" class="form-label" style="text-align: left;">Name</label>
+                    <input type="text" id="swal-input-name" class="form-control" id="edit-user-name" value="${user.name}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit-user-email" class="form-label">Email</label>
+                    <input type="email" id="swal-input-email" class="form-control" id="edit-user-email" value="${user.email}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit-user-password" class="form-label">Password</label>
+                    <input type="password" id="swal-input-password" class="form-control" id="edit-user-password">
+                </div>
+                <div class="mb-3">
+                    <label for="edit-user-usertype" class="form-label">User Type</label>
+                    <select class="form-select" id="swal-input-usertype" required>
+                    <option value="admin" ${user.usertype === 'admin' ? 'selected' : ''}>Admin</option>
+                        <option value="petugas" ${user.usertype === 'petugas' ? 'selected' : ''}>Petugas</option>
+                        <option value="pelanggan" ${user.usertype === 'pelanggan' ? 'selected' : ''}>Pelanggan</option>
+                    </select>
+                </div>
                 `,
-                focusConfirm: false,
-                preConfirm: () => {
+                focusConfirm: true,
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`,
+                preConfirm: async () => {
                     const name = document.getElementById('swal-input-name').value;
                     const email = document.getElementById('swal-input-email').value;
+                    const password = document.getElementById('swal-input-password').value;
                     const usertype = document.getElementById('swal-input-usertype').value;
 
                     // Validate inputs
                     if (!name || !email || !usertype) {
                         Swal.showValidationMessage('Please fill in all fields');
                     }
+                    const response = await fetch('/api/hashpw', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{csrf_token()}}' // Sertakan token CSRF di header
+                        },
+                        body: JSON.stringify({
+                            password: password
+                        })
+                    });
 
-                    return { name, email, usertype };
+                    const data = await response.json();
+                    console.log(data);
+
+                    return { name, email, password: data.hash,  usertype };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Send updated data to the API
                     $.ajax({
-                        url: `https://parkhere-backend.ourproject.my.id/user/update/${userId}`, // Adjust the URL as needed
+                        url: `https://parkhere-backend.ourproject.my.id/user/${userId}`, // Adjust the URL as needed
                         type: 'PUT',
                         contentType: 'application/json',
                         data: JSON.stringify(result.value),
@@ -124,6 +177,9 @@ $('#users').on('click', '.update-btn', function (e) {
                         }
                     });
                 }
+                else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
             });
         },
         error: function (xhr, status, error) {
@@ -132,6 +188,91 @@ $('#users').on('click', '.update-btn', function (e) {
                 'Could not fetch user data.',
                 'error'
             );
+        }
+    });
+});
+
+$('#add-user-btn').on('click', function () {
+    // Open SweetAlert untuk form input
+    Swal.fire({
+        title: 'New User',
+        html:`
+        <div class="alert" id"alert">
+            <div class="mb-3">
+                <label for="edit-user-name" class="form-label text-start">Name</label>
+                <input type="text" class="form-control" id="swal-input-name" required>
+            </div>
+            <div class="mb-3">
+                <label for="edit-user-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="swal-input-email" required>
+            </div>
+            <div class="mb-3">
+                <label for="edit-user-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="swal-input-password">
+            </div>
+            <div class="mb-3">
+                <label for="edit-user-usertype" class="form-label">User Type</label>
+                <select class="form-select" id="swal-input-usertype" required>
+                    <option value="" disabled>Select User Type</option>
+                    <option value="admin">Admin</option>
+                    <option value="petugas">Petugas</option>
+                    <option value="pelanggan">Pelanggan</option>
+                </select>
+            </div>
+        </div>
+        `,
+        focusConfirm: true,
+        showCancelButton: true,
+        preConfirm: async () => {
+            const name = document.getElementById('swal-input-name').value;
+            const email = document.getElementById('swal-input-email').value;
+            const password = document.getElementById('swal-input-password').value;
+            const usertype = document.getElementById('swal-input-usertype').value;
+            // Validasi input
+            if (!name || !email || !password || !usertype) {
+                Swal.showValidationMessage('Please fill in all fields');
+            }
+            const response = await fetch('/api/hashpw', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{csrf_token()}}' // Sertakan token CSRF di header
+                },
+                body: JSON.stringify({
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            return { name, email, password: data.hash, usertype };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Kirim data baru ke API
+            $.ajax({
+                url: 'https://parkhere-backend.ourproject.my.id/user/', // Sesuaikan endpoint API
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(result.value),
+                success: function (response) {
+                    Swal.fire(
+                        'Added!',
+                        'New user has been added.',
+                        'success'
+                    );
+                    // Reload DataTable
+                    $('#users').DataTable().ajax.reload();
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Error!',
+                        'There was an error adding the user.',
+                        'error'
+                    );
+                }
+            });
         }
     });
 });
@@ -154,7 +295,7 @@ $('#users').on('click', '.delete-btn', function (e) {
         if (result.isConfirmed) {
             // Call the delete API endpoint
             $.ajax({
-                url: `https://parkhere-backend.ourproject.my.id/user/delete/${userId}`, // Adjust the URL as needed
+                url: `https://parkhere-backend.ourproject.my.id/user/${userId}`, // Adjust the URL as needed
                 type: 'DELETE',
                 success: function (response) {
                     // Handle success response
