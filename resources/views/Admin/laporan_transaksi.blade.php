@@ -18,8 +18,18 @@
                         <div class="d-flex justify-content-between">
                             <h6 class="pt-3">Kelola laporan</h6>
                             <div class="d-flex justify-content-end">
-                                <button id="export-csv" class="btn btn-success m-2">Export to CSV</button>
-                                <button id="export-pdf" class="btn btn-danger m-2">Export to PDF</button>
+                                <button id="export-csv" class="btn btn-success m-2">
+                                    <span id="csv-text">Export to CSV</span>
+                                    <div id="csv-loading-spinner" style="display: none;">
+                                        <span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span>
+                                    </div>
+                                </button>
+                                <button id="export-pdf" class="btn btn-danger m-2">
+                                    <span id="pdf-text">Export to PDF</span>
+                                    <div id="pdf-loading-spinner" style="display: none;">
+                                        <span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span>
+                                    </div>
+                                </button>
                             </div>
                         </div>
                         <hr>
@@ -45,8 +55,20 @@
                                 <input type="text" id="name" class="form-control" placeholder="Name" value="{{ request('name') }}">
                             </div>
                         </div>
-                        <button id="filter-btn" class="btn btn-primary mt-3">Filter</button>
-                        <button id="reset-btn" class="btn btn-secondary mt-3">Reset Filters</button>
+                        <!-- Tambahkan elemen spinner/loading -->
+
+                        <button id="filter-btn" class="btn btn-primary mt-3">
+                            <span id="filter-text">Filter</span>
+                            <div id="filter-loading-spinner" style="display: none;">
+                                <span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span>
+                            </div>
+                        </button>
+                        <button id="reset-btn" class="btn btn-secondary mt-3">
+                            <span id="reset-text">Reset Filters</span>
+                            <div id="reset-loading-spinner" style="display: none;">
+                                <span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -97,9 +119,9 @@
                 autoWidth: true,
                 paging: false,
             });
-
             // Fetch data via AJAX
             function fetchData(filters) {
+                
                 $.ajax({
                     url: "{{ route('admin.laporan_transaksi.data') }}",
                     type: 'GET',
@@ -125,26 +147,36 @@
                     },
                     error: function (xhr, status, error) {
                         console.error("Error fetching data:", error);
-                    }
+                    },
                 });
             }
 
             // Filter button click
             $('#filter-btn').on('click', function () {
+                $('#filter-loading-spinner').show();
+                $('#filter-text').hide();
                 const filters = {
                     usertype: $('#usertype').val(),
                     email: $('#email').val(),
                     name: $('#name').val()
                 };
                 fetchData(filters);
+                $('#filter-loading-spinner').hide();
+                $('#filter-text').show(); 
             });
 
             // Reset button click
             $('#reset-btn').on('click', function () {
+                $('#reset-loading-spinner').show();
+                $('#reset-text').hide();
+
                 $('#usertype').val('');
                 $('#email').val('');
                 $('#name').val('');
                 fetchData({}); // Ambil semua data tanpa filter
+
+                $('#reset-loading-spinner').hide();
+                $('#reset-text').show();
             });
 
             // Initial fetch on page load
@@ -152,6 +184,8 @@
 
             // Export to CSV
             $('#export-csv').on('click', function () {
+                $('#csv-loading-spinner').show();
+                $('#csv-text').hide();
                 // Get filtered data from DataTable
                 var data = table.rows({ search: 'applied' }).data().toArray();
 
@@ -175,10 +209,14 @@
                     link.click();
                     document.body.removeChild(link);
                 }
+                $('#csv-loading-spinner').hide();
+                $('#csv-text').show();
             });
 
             // Export to PDF
             $('#export-pdf').on('click', function () {
+                $('#pdf-loading-spinner').show();
+                $('#pdf-text').hide();
                 // Get the DataTable rows as an array of objects
                 var data = table.rows({ search: 'applied' }).data().toArray();
                 console.log(data); // Debug data yang diambil
@@ -227,6 +265,8 @@
 
                 // Create and download the PDF
                 pdfMake.createPdf(docDefinition).download('laporan.pdf');
+                $('#pdf-loading-spinner').hide();
+                $('#pdf-text').show();
             });
         });
     </script>
