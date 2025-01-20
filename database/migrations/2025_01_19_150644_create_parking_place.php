@@ -13,21 +13,16 @@ return new class extends Migration
     {
         Schema::create('parking_place', function (Blueprint $table) {
             $table->id('place_id');
-            $table->unsignedBigInteger('user_id');
+            $table->string('name_place'); 
             $table->integer('slot_tersedia'); 
+            $table->string('image',100); 
             $table->integer('jumlah_slot'); 
             $table->integer('jumlah_booking'); 
             $table->string('lokasi', 100); 
             $table->text('url_stream'); 
             $table->integer('harga_awal'); 
             $table->integer('harga_per_jam');
-            $table->string('petugas_1', 50);
-            $table->string('petugas_2', 50)->nullable(); 
             $table->timestamps(); 
-
-            // Foreign key
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
         });
     }
 
