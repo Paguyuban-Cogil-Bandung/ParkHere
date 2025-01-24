@@ -9,6 +9,7 @@ use App\Models\ParkingPlace;
 use App\Models\ListPetugas;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class KelolaParkirController extends Controller
 {
@@ -32,8 +33,8 @@ class KelolaParkirController extends Controller
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('images'), $filename);
-                $place_parking->image = $filename;
+                $path = $file->storeAs('public/images', $filename);
+                $place_parking->image = 'images/' . $filename;
             }
 
             $place_parking->jumlah_slot = $request->jumlah_slot;
@@ -76,17 +77,18 @@ class KelolaParkirController extends Controller
         DB::beginTransaction();
         try {
             if ($request->hasFile('image')) {
-                if ($place_parking->image && file_exists(public_path($place_parking->image))) {
-                    unlink(public_path($place_parking->image)); // Hapus file lama dari public folder
+                // Hapus file lama dari storage jika ada
+                if ($place_parking->image && Storage::exists('public/' . $place_parking->image)) {
+                    Storage::delete('public/' . $place_parking->image);
                 }
-                
-                // Simpan file baru ke direktori public/images
-                $imagePath = $request->file('image')->move('images', $request->file('image')->getClientOriginalName());
-                
-                // Simpan path relatif file ke database
-                $place_parking->image = 'images/' . $request->file('image')->getClientOriginalName();
+            
+                // Simpan file baru ke storage/app/public/images
+                $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+                $path = $request->file('image')->storeAs('public/images', $filename);
+            
+                // Simpan path relatif file ke database (tanpa 'public/')
+                $place_parking->image = 'images/' . $filename;
             }
-
             $place_parking->update([
                 'name' => $request->name_place,
                 'slot_tersedia' => $request->slot_tersedia,
@@ -120,7 +122,10 @@ class KelolaParkirController extends Controller
         DB::beginTransaction();
         try {
             $place_parking = ParkingPlace::findOrFail($id);
-            unlink(public_path('images/'.$place_parking->image));
+
+            if ($place_parking->image && Storage::exists('public/images/' . $place_parking->image)) {
+                Storage::delete('public/images/' . $place_parking->image);
+            }
             ParkingPlace::where('place_id', $id)->delete();
             ListPetugas::where('place_id', $id)->delete();
 

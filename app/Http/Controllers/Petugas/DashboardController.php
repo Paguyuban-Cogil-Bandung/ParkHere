@@ -9,6 +9,7 @@ use App\Models\ListPetugas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -60,22 +61,23 @@ class DashboardController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Cari data tempat parkir berdasarkan ID
         $parkingPlace = ParkingPlace::findOrFail($id);
 
-        // Hapus gambar lama jika ada dan file tersebut benar-benar ada
-        if ($parkingPlace->image && file_exists(public_path($parkingPlace->image))) {
-            unlink(public_path($parkingPlace->image)); // Hapus file dari public/images
+        // Hapus gambar lama jika ada dan file tersebut benar-benar ada di storage
+        if ($parkingPlace->image && Storage::exists('public/' . $parkingPlace->image)) {
+            Storage::delete('public/' . $parkingPlace->image); 
         }
 
-        // Simpan file baru ke direktori public/images
-        $file = $request->file('image');
-        $fileName = time() . '_' . $file->getClientOriginalName(); // Gunakan nama unik untuk file
-        $file->move(public_path('images'), $fileName);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
 
-        // Perbarui path gambar di database
-        $parkingPlace->image = $fileName;
-        $parkingPlace->save(); // Gunakan save() untuk menyimpan perubahan
+            $fileName = time() . '_' . $file->getClientOriginalName();
+
+            $file->storeAs('public/images', $fileName);
+
+            $parkingPlace->image = 'images/' . $fileName;
+            $parkingPlace->save();
+        }
 
         // Kembalikan respons JSON
         return response()->json([

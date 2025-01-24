@@ -160,7 +160,7 @@
                                 <input type="file" id="fileInput" class="form-input">
                                 <button id="updateButton" data-id="{{$parking_places[0]['place_id']}}" class="btn btn-primary">Update</button>
                             </div>
-                            <img src="{{ asset('images/' . $parking_places[0]['image']) }}" class="rounded pt-2" alt="">
+                            <img src="{{ asset('storage/' . $parking_places[0]['image']) }}" class="rounded pt-2" alt="">
                         </div>
                          <hr>
                     </div>

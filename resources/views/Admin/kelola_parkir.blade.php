@@ -33,7 +33,7 @@
                         </div>
                         <div class="card-body p-3">
                             <ul class="list-group ">
-                                <img src="{{ asset('images/' . $place->image) }}" alt="" class="img rounded mx-auto d-block" style="object-fit: cover;">
+                                <img src="{{ asset('storage/' . $place->image) }}" alt="" class="img rounded mx-auto d-block" style="object-fit: cover;">
                                     <div class="d-flex justify-content-between align-items-center pt-2">
                                         <h6 class="mb-1 text-dark text-sm">Slot Tersedia</h6>
                                         <span class="text-sm font-weight-bold">{{$place->slot_tersedia}}</span>
