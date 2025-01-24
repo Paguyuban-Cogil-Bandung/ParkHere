@@ -17,7 +17,10 @@ class ParkingPlace extends Model
      * @var array
      */
     protected $fillable = [
+        'name_place',
+        'status_place',
         'slot_tersedia',
+        'image',
         'jumlah_slot',
         'jumlah_booking',
         'lokasi',

@@ -38,21 +38,33 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-3 mb-2">
-                                <label for="status-filter">User Type</label>
-                                <select id="usertype" class="form-control">
-                                    <option value="">Select Usertype</option>
-                                    <option value="admin" {{ request('usertype') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="petugas" {{ request('usertype') == 'petugas' ? 'selected' : '' }}>Petugas</option>
-                                    <option value="pelanggan" {{ request('usertype') == 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                                <label for="date-start">ID Booking</label>
+                                <input type="text" id="id_booking" class="form-control" placeholder="ID Booking" value="{{ request('booking_id') }}">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label for="status-filter">Parkir</label>
+                                <select id="parkir" class="form-control">
+                                    <option value="">Select Parking Place</option>
+                                    @foreach($parkingPlaces as $parkingPlace)
+                                        <option value="{{ $parkingPlace->name_place}}" {{ request('parkir') == $parkingPlace->name_place ? 'selected' : '' }}>{{$parkingPlace->name_place}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label for="date-start">Email</label>
-                                <input type="text" id="email" class="form-control" placeholder="Email" value="{{ request('email') }}">
+                                <label for="status-filter">Metode Bayar</label>
+                                <select id="metode_bayar" class="form-control">
+                                    <option value="">Select Metode Bayar</option>
+                                    <option value="transfer" {{ request('metode_bayar') == 'transfer' ? 'selected' : '' }}>Transfer</option>
+                                    <option value="dipetugas" {{ request('metode_bayar') == 'dipetugas' ? 'selected' : '' }}>Di Petugas</option>
+                                </select>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label for="keyword">Name</label>
-                                <input type="text" id="name" class="form-control" placeholder="Name" value="{{ request('name') }}">
+                                <label for="date-start">Tanggal Awal</label>
+                                <input type="date" id="start_time" class="form-control" placeholder="Email" value="{{ request('start_time') }}">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label for="keyword">Tanggal Akhir</label>
+                                <input type="date" id="end_time" class="form-control" placeholder="" value="{{ request('end_time') }}">
                             </div>
                         </div>
                         <!-- Tambahkan elemen spinner/loading -->
@@ -81,11 +93,14 @@
                             <table id="laporan" class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>ID Booking</th>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>User Type</th>
-                                        <th>Created At</th>
+                                        <th>Tempat</th>
+                                        <th>Metode Bayar</th>
+                                        <th>Durasi</th>
+                                        <th>Total Bayar</th>
+                                        <th>Tambahan Bayar</th>
+                                        <th>Tanggal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -130,14 +145,17 @@
                         console.log(response); // Debug data dari server
                         table.clear(); // Hapus data lama di tabel
 
-                        if (Array.isArray(response.users)) {
+                        if (Array.isArray(response.reports)) {
                             // Tambahkan data baru ke DataTable
-                            const rows = response.users.map(user => [
-                                user.id,
-                                user.name,
-                                user.email,
-                                user.usertype,
-                                user.created_at
+                            const rows = response.reports.map(report => [
+                                report.booking_id,
+                                report.name_user,
+                                report.name_place,
+                                report.metode_bayar,
+                                report.durasi,
+                                report.total_bayar,
+                                report.tambahan_bayar,
+                                report.created_at,
                             ]);
                             table.rows.add(rows).draw();
                         } else {
@@ -156,9 +174,11 @@
                 $('#filter-loading-spinner').show();
                 $('#filter-text').hide();
                 const filters = {
-                    usertype: $('#usertype').val(),
-                    email: $('#email').val(),
-                    name: $('#name').val()
+                    booking_id: $('#id_booking').val(),
+                    parkir: $('#parkir').val(),
+                    metode_bayar : $('#metode_bayar').val(),
+                    start_time : $('#start_time').val(),
+                    end_time : $('#end_time').val(),
                 };
                 fetchData(filters);
                 $('#filter-loading-spinner').hide();
@@ -170,9 +190,11 @@
                 $('#reset-loading-spinner').show();
                 $('#reset-text').hide();
 
-                $('#usertype').val('');
-                $('#email').val('');
-                $('#name').val('');
+                $('#id_booking').val('');
+                $('#parkir').val('');
+                $('#metode_bayar').val('');
+                $('#start_time').val('');
+                $('#end_time').val('');
                 fetchData({}); // Ambil semua data tanpa filter
 
                 $('#reset-loading-spinner').hide();
@@ -190,7 +212,7 @@
                 var data = table.rows({ search: 'applied' }).data().toArray();
 
                 // Create CSV content
-                var csvContent = 'ID,Name,Email,User Type,Created At\n'; // Add headers
+                var csvContent = 'ID Booking,Name,Tempat,Durasi,Total Bayar,Tambahan Bayar,Tanggal\n'; // Add headers
                 csvContent += data.map(row => row.join(',')).join('\n'); // Add rows
 
                 // Create a Blob from the CSV content
@@ -229,14 +251,17 @@
                                 headerRows: 1,
                                 body: [
                                     // Header row
-                                    ['ID', 'Name', 'Email', 'User Type', 'Created At'],
+                                    ['ID Booking', 'Name', 'Tempat', 'Metode Bayar', 'Durasi', 'Total Bayar', 'Tambahan Bayar', 'Tanggal'],
                                     // Data rows
                                     ...data.map(item => [
                                         item[0] || '',
                                         item[1] || '',
                                         item[2] || '',
                                         item[3] || '',
-                                        item[4] || ''
+                                        item[4] || '',
+                                        item[5] || '',
+                                        item[6] || '',
+                                        item[7] || '',
                                     ])
                                 ]
                             }

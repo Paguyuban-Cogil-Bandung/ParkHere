@@ -9,7 +9,19 @@
 @endsection
 
 @section('content')
-    @include('layout.navbars.auth.topnav', ['title' => 'Dashboard'])
+{{-- {{dd($parking_places)}} --}}
+@include('layout.navbars.auth.topnav', ['title' => 'Dashboard'])
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <div class="container-fluid py-0 pt-0 pb-0">
+        <div class="row">
+            <div class="mb-xl-0">
+                <div class="card">
+                    <span class="text-sm px-2 py-2"><i class="fa fa-location-dot"></i> Lokasi Penugasan : <b>{{$parking_places[0]['name_place']}}</b></span>
+                     
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-6 col-sm-6 col-xl-3 order-1 mb-4">
@@ -20,7 +32,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Jumlah Slot Tersedia</p>
                                     <h6 class="font-weight-bolder">
-                                        50
+                                        {{$jumlah_slot_tersedia}}
                                     </h6>
                                 </div>
                             </div>
@@ -41,7 +53,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Jumlah Booking Pending</p>
                                     <h6 class="font-weight-bolder">
-                                        2,300
+                                        {{$jumlah_booking_pending}}
                                     </h6>
                                 </div>
                             </div>
@@ -62,7 +74,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Slot Yang Terisi</p>
                                     <h6 class="font-weight-bolder">
-                                        30
+                                        {{$jumlah_slot_terisi}}
                                     </h6>
                                 </div>
                             </div>
@@ -83,7 +95,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Transaksi Hari Ini</p>
                                     <h6 class="font-weight-bolder">
-                                        103.000.000
+                                        {{$total_transaksi_today}}
                                     </h6>
                                 </div>
                             </div>
@@ -98,71 +110,200 @@
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-lg-4">
+        <div class="row mt-0">
+            <div class="col-lg-8 mt-4">
                 <div class="card">
                     <div class="card-header pb-0 p-3">
                         <h6 class="mb-0">Pantauan</h6>
                     </div>
                     <div class="card-body p-3">
-                        <iframe width="100%" height="315" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe width="100%" height="515" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 mb-lg-0 mb-4">
+            <div class="col-lg-4 mt-4">
                 <div class="card ">
+                    <div class="card-header pb-0 p-3">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="mb-2"><i class="fa fa-cog"></i> Pengaturan Cabang {{$parking_places[0]['name_place']}}</h6>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <span for="" clas>Status : </span>
+                            </div>
+                            <div class="col-10">
+                                <select class="form-select" name="status" data-id="{{$parking_places[0]['place_id']}}" id="status">
+                                    <option value="Buka" {{$parking_places[0]['status_place'] == 'Buka' ? 'selected' : ''}}> Buka </option>
+                                    <option value="Tutup" {{$parking_places[0]['status_place'] == 'Tutup' ? 'selected' : ''}}> Tutup </option>
+                                    <option value="Penuh" {{$parking_places[0]['status_place'] == 'Penuh' ? 'selected' : ''}}> Penuh </option>
+                                </select>
+                            </div>
+                        </div>
+                         <hr>
+                        <div class="row">
+                            <div class="col-2">
+                                <span for="" clas>Darurat : </span>
+                            </div>
+                            <div class="col-10">
+                                <a href="{{$parking_places[0]['emergency_url_ci']}}" class="btn btn-danger">Tombol Darurat CheckIn</a>
+                                <a href="{{$parking_places[0]['emergency_url_co']}}" class="btn btn-danger">Tombol Darurat CheckOut</a>
+                            </div>
+                        </div>
+                         <hr>
+                         <div class="row">
+                            <div class="col-2">
+                                <span>Update Foto</span>
+                            </div>
+                            <div class="col-10">
+                                <input type="file" id="fileInput" class="form-input">
+                                <button id="updateButton" data-id="{{$parking_places[0]['place_id']}}" class="btn btn-primary">Update</button>
+                            </div>
+                            <img src="{{ asset('images/' . $parking_places[0]['image']) }}" class="rounded pt-2" alt="">
+                        </div>
+                         <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="container-fluid py-2">
+        <div class="row">
+            <div class="col">
+                <div class="card">
                     <div class="card-header pb-0 p-3">
                         <div class="d-flex justify-content-between">
                             <h6 class="mb-2">Daftar Transaksi</h6>
                         </div>
                     </div>
                     <div class="table-responsive ps-4 pe-4">
-                        <table id="users" class="table align-items-center mb-0">
+                        <table id="booking" class="table align-items-center mb-0">
                             <thead>
                                 <tr>
                                     <th>ID Booking</th>
+                                    <th>Nama User</th>
                                     <th>No Plat</th>
                                     <th>Total Jam Parkir</th>
-                                    <th>Bayar</th>
-                                    <th>Status</th>
+                                    <th>Total Bayar</th>
+                                    <th>Status Booking</th>
+                                    <th>Status Bayar</th>
+                                    <th>Jam Checkin</th>
+                                    <th>Jam Bayar</th>
+                                    <th>Jam Checkout</th>
+                                    <th>Total Bayar</th>
+                                    <th>Metode Bayar</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach($bookings as $booking)
+                                <tr>
+                                    <td>{{ $booking['booking_id'] }}</td>
+                                    <td>{{ $booking['name_user'] }}</td>
+                                    <td>{{ $booking['no_plat'] }}</td>
+                                    <td>{{ $booking['durasi'] }}</td>
+                                    <td>{{ $booking['total_bayar'] }}</td>
+                                    <td>{{ $booking['status_booking'] }}</td>
+                                    <td>{{ $booking['status_bayar'] }}</td>
+                                    <td>{{ $booking['jam_checkin'] }}</td>
+                                    <td>{{ $booking['jam_bayar'] }}</td>
+                                    <td>{{ $booking['jam_checkout'] }}</td>
+                                    <td>{{ $booking['total_bayar'] }}</td>
+                                    <td>{{ $booking['metode_bayar'] }}</td>
+                                    <td><button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>
+                                        <button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        @include('layout.footers.auth.footer')
     </div>
+    @include('layout.footers.auth.footer')
+
 @endsection
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    new DataTable('#users', {
-    ajax: 'https://parkhere-backend.ourproject.my.id/user/list',
-    columns: [
-        { data: 'id' },
-        { data: 'name' },
-        { data: 'email' },
-        { data: 'usertype' },
-        { data: 'created_at' },
-        {
-            data: null,
-            className: "dt-center editor-delete",
-            orderable: false,
-            "mRender": function (data, type, row) {
-                return `<button class="update-btn btn btn-secondary btn-sm" data-id="${data.id}" data-name="${data.name}">Edit <i class="fe fe-edit"></i></button> 
-                        <button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>`;
-            }
+    new DataTable('#booking', {
+    
+});
+document.getElementById('status').addEventListener('change', function () {
+    const select = this;
+    const placeId = select.getAttribute('data-id'); // Ambil ID tempat parkir
+    const newStatus = select.value; // Ambil nilai baru
+
+    // URL endpoint untuk update status
+    const url_update = `{{ route('toggleStatus', ['id' => ':id']) }}`.replace(':id', placeId);
+
+    // Data yang akan dikirim ke server
+    const data = {
+        status: newStatus, // Status baru
+        id: placeId // ID tempat parkir
+    };
+
+    // Kirim request ke server dengan jQuery AJAX
+    $.ajax({
+        url: url_update,
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Sertakan token CSRF di header
         },
-        { data: 'updated_at', visible: false },
-        { data: 'password', visible: false },
-    ],
-    processing: false,
-    serverSide: true,
-    order: {},
+        data: JSON.stringify(data), // Kirim data sebagai JSON
+        contentType: 'application/json', // Tentukan tipe konten sebagai JSON
+        success: function (response) {
+            Swal.fire('Berhasil!', 'Status parkir berhasil diperbarui.', 'success');
+            location.reload(); // Reload halaman jika sukses
+        },
+        error: function (xhr) {
+            Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui status parkir.', 'error');
+        }
+    });
+});
+
+document.getElementById('updateButton').addEventListener('click', function (e) {
+    e.preventDefault(); // Mencegah refresh halaman
+
+    const fileInput = document.getElementById('fileInput');
+
+    const file = fileInput.files[0]; // Ambil file yang diunggah
+    const formData = new FormData();
+    const placeId = $(this).data('id'); 
+    if (!file) {
+        Swal.fire('Error!', 'Silakan pilih file terlebih dahulu.', 'error');
+        return;
+    }
+
+    // Tambahkan file ke FormData
+    formData.append('image', file);
+
+    // Tambahkan CSRF token untuk keamanan
+    formData.append('_token', '{{ csrf_token() }}');
+
+    // Kirim request AJAX ke server
+    let url_update = `{{ route('updateParkingImage', ['id' => ':id']) }}`.replace(':id', placeId);
+    $.ajax({
+        url: url_update,
+        type: 'POST',
+        data: formData,
+        processData: false, // Jangan proses data menjadi string
+        contentType: false, // Jangan tetapkan header Content-Type secara manual
+        success: function (response) {
+            Swal.fire('Berhasil!', 'Foto berhasil diperbarui.', 'success');
+            location.reload(); // Reload halaman jika sukses
+        },
+        error: function (xhr) {
+            Swal.fire('Error!', 'Terjadi kesalahan saat memperbarui foto.', 'error');
+        }
+    });
 });
 
 // Event delegation for dynamically created buttons

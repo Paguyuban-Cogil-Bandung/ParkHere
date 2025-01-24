@@ -32,5 +32,6 @@ class Booking extends Model
         'harga_per_jam',
         'total_bayar',
         'tambahan_bayar',
+        'metode_bayar',
     ];
 }
