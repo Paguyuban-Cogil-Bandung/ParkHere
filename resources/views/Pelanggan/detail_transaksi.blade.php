@@ -24,12 +24,24 @@
                         </div>
                     </div>
                     <div class="card-body pt-3">
-                        <iframe width="100%" height="315" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        {{-- <video id="my_video" class="video-js vjs-default-skin" controls>
+                            <source src="rtsp://192.168.0.88/av0_0&user=admin&password=admin" type="application/x-mpegURL">
+                          </video> --}}
+
+                        {{-- <video id="test_video" controls autoplay>
+                            <source src="rtsp://188.166.234.50:8001/av0_0&user=admin&password=admin">
+                        </video> --}}
+
+
+                        <video id="my_video" class="video-js vjs-default-skin" controls preload="auto" autoplay>
+                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
+                        </video>
+
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="row pb-3">
             <div class="mb-xl-0">
                 <div class="card">
@@ -92,37 +104,44 @@
             </div>
         </div>
     </div>
-        @include('layout.footers.auth.footer')
+    @include('layout.footers.auth.footer')
     </div>
 @endsection
+
 @section('js')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        if (navigator.geolocation) {
-            // Function to fetch and log location
-            const fetchLocation = () => {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (navigator.geolocation) {
+                // Function to fetch and log location
+                const fetchLocation = () => {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
 
-                        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-                    },
-                    (error) => {
-                        console.error('Error fetching location:', error.message);
-                        alert('Unable to fetch location. Please allow location access.');
-                    }
-                );
-            };
+                            console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+                        },
+                        (error) => {
+                            console.error('Error fetching location:', error.message);
+                            alert('Unable to fetch location. Please allow location access.');
+                        }
+                    );
+                };
 
-            // Fetch location initially
-            fetchLocation();
+                // Fetch location initially
+                fetchLocation();
 
-            // Set an interval to fetch location every 1 second (1000ms)
-            setInterval(fetchLocation, 1000);
-        } else {
-            alert('Geolocation is not supported by your browser.');
-        }
-    });
-</script>
+                // Set an interval to fetch location every 1 second (1000ms)
+                setInterval(fetchLocation, 1000);
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        });
+    </script>
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+    <script>
+        var player = videojs('my_video');
+    </script>
 @endsection

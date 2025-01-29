@@ -17,19 +17,19 @@
                 <div class="card">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h6 class="text-uppercase text-sm">ParkHere Unikom Bandung</h6>
+                            <h6 class="text-uppercase text-sm">ParkHere Unikom Bandungg</h6>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="text-uppercase text-sm">Pantauan</h6>
                         </div>
                     </div>
                     <div class="card-body pt-3">
-                        <iframe width="100%" height="315" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        {{-- <iframe width="100%" height="315" src="{{ $data->url_stream }}" allowfullscreen></iframe> --}}
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="row pb-3">
             <div class="mb-xl-0">
                 <div class="card">
