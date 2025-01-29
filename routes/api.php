@@ -10,6 +10,7 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/hashpw', [\App\Http\Controllers\Admin\UserController::class, 'hashpw'])->name('hashpw');
 Route::post('/parkir/add', [\App\Http\Controllers\Admin\KelolaParkirController::class, 'add'])->name('kelola_parkir.add');
+Route::get('/parkir/location', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'location'])->name('kelola_parkir.location');
 Route::get('/parkir/{id}', [\App\Http\Controllers\Admin\KelolaParkirController::class, 'find'])->name('kelola_parkir.find');
 Route::post('/parkir/edit/{id}', [\App\Http\Controllers\Admin\KelolaParkirController::class, 'update'])->name('kelola_parkir.edit');
 Route::delete('/parkir/delete/{id}', [\App\Http\Controllers\Admin\KelolaParkirController::class, 'delete'])->name('kelola_parkir.delete');

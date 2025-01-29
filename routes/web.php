@@ -9,7 +9,7 @@ Route::get('/', function () {return view('welcome');})->name('welcome');
 Route::middleware(['pelanggan', 'auth', 'dontback'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'view'])->name('dashboard');
     Route::get('/aktivitas', [\App\Http\Controllers\Pelanggan\AktivitasController::class, 'view'])->name('aktivitas');
-    Route::get('/detail_lokasi', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'lokasi'])->name('detail_lokasi');
+    Route::get('/detail_lokasi/{id}', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'lokasi'])->name('detail_lokasi');
     Route::get('/detail_transaksi', [\App\Http\Controllers\Pelanggan\TransaksiController::class, 'view'])->name('detail_transaksi');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
