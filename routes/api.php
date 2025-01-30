@@ -16,3 +16,5 @@ Route::post('/parkir/edit/{id}', [\App\Http\Controllers\Admin\KelolaParkirContro
 Route::delete('/parkir/delete/{id}', [\App\Http\Controllers\Admin\KelolaParkirController::class, 'delete'])->name('kelola_parkir.delete');
 Route::post('/parking-place/{id}/update-status', [DashboardController::class, 'toggleStatus'])->name('toggleStatus');
 Route::post('/update-parking-image/{id}', [DashboardController::class, 'updateImage'])->name('updateParkingImage');
+Route::post('/booking', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'booking'])->name('parkir.booking');
+Route::post('/change-booking', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'changeBookingStatus'])->name('parkir.booking.update');

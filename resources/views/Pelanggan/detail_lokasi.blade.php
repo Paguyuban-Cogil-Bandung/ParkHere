@@ -17,13 +17,16 @@
                 <div class="card">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h6 class="text-uppercase text-sm">ParkHere Unikom Bandungg</h6>
+                            <h6 class="text-uppercase text-sm">{{$data->name_place}}</h6>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="text-uppercase text-sm">Pantauan</h6>
                         </div>
                     </div>
                     <div class="card-body pt-3">
+                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
+                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
+                        </video>
                         {{-- <iframe width="100%" height="315" src="{{ $data->url_stream }}" allowfullscreen></iframe> --}}
                     </div>
                 </div>
@@ -37,7 +40,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="text-uppercase text-sm">Detail</h6>
                             <div>
-                                <a href="" class="btn btn-sm btn-warning">Booking Sekarang</a>
+                                <button id="booking_btn" class="btn btn-sm btn-warning">Booking Sekarang</button>
                             </div>
                         </div>
                     </div>
@@ -49,21 +52,21 @@
                                         <td>
                                             <span class="text-sm">Slot Parkir Tersedia</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">40</span>
+                                            <span class="text-sm">{{$data->slot_tersedia}}</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="text-sm">Harga Awal</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">Rp. 10.000</span>
+                                            <span class="text-sm">Rp.{{$data->harga_awal}}</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="text-sm">Harga per Jam</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">Rp. 5.000</span>
+                                            <span class="text-sm">Rp.{{$data->harga_per_jam}}</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -74,14 +77,14 @@
                                         <td>
                                             <span class="text-sm">Total Slot</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">500</span>
+                                            <span class="text-sm">{{$data->jumlah_slot}}</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="text-sm">Status Tempat Parkir</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">Buka</span>
+                                            <span class="text-sm">{{$data->status_place}}</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -142,5 +145,72 @@
             alert('Geolocation is not supported by your browser.');
         }
     });
+</script>
+<link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+<script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+<script>
+    var player = videojs('my_video');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).on('click', '#booking_btn', function () {
+        const Booking_id = '{{$data->place_id}}';
+        const Booking_name = '{{$data->name_place}}';
+        const harga_awal = '{{$data->harga_awal}}';
+        const harga_per_jam = '{{$data->harga_per_jam}}';
+        const id_user = '{{Auth::user()->id}}';
+        const name_user = `{{Auth::user()->name}}`;
+            Swal.fire({
+                title: 'Booking '+ Booking_name,
+                html: `
+                <div class="row">
+                        <div class="mb-3">
+                            <label for="add-place-name" class="form-label text-start">Plat Nomor*</label>
+                            <input type="text" class="form-control" id="swal-input-no_plat" placeholder="X 1234 XX" required>
+                        </div>
+                </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                preConfirm: () => {
+                    const no_plat = document.getElementById('swal-input-no_plat').value;
+                    if (!no_plat) {
+                        Swal.showValidationMessage('Masukkan Plat Nomor');
+                        return false;
+                    }
+                    return {no_plat};
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('id_user', id_user);
+                    formData.append('booking_id', Booking_id);
+                    formData.append('name_user', name_user);
+                    formData.append('no_plat', result.value.no_plat);
+                    formData.append('name_place', Booking_name);
+                    formData.append('harga_awal', harga_awal);
+                    formData.append('harga_per_jam', harga_per_jam);
+
+                    $.ajax({
+                        url: '{{ route('parkir.booking') }}',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{csrf_token()}}' // Sertakan token CSRF di header
+                        },
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        success: function (response) {
+                            Swal.fire('Berhasil Booking!', 'Batas Booking 2 Jam', 'success');
+                            location.reload();
+                        },
+                        error: function (xhr) {
+                            Swal.fire('Error!', 'Gagal Booking, Silahkan Coba Lagi.', 'error');
+                        }
+                    });
+                }
+            });
+        });
 </script>
 @endsection

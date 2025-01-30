@@ -17,7 +17,7 @@
                 <div class="card">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <div class="d-flex justify-content-center align-items-center">
-                            <h6 class="text-uppercase text-sm">ParkHere Unikom Bandung</h6>
+                            <h6 class="text-uppercase text-sm">{{$data->name_place}}</h6>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="text-uppercase text-sm">Pantauan</h6>
@@ -33,7 +33,7 @@
                         </video> --}}
 
 
-                        <video id="my_video" class="video-js vjs-default-skin" controls preload="auto" autoplay>
+                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
                             <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
                         </video>
 
@@ -48,9 +48,11 @@
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="text-uppercase text-sm">Detail</h6>
-                            <div>
-                                <a href="" class="btn btn-sm btn-warning">Booking Sekarang</a>
-                            </div>
+                            @if ($data->status_booking == 'Check In' AND $data->status_bayar == 'Belum Bayar')
+                                <div>
+                                    <a href="{{url('i')}}" class="btn btn-sm btn-warning">Bayar</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body pt-3">
@@ -59,23 +61,44 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <span class="text-sm">Slot Parkir Tersedia</span>
+                                            <span class="text-sm">ID Booking</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">40</span>
+                                            <span class="text-sm">{{$data->booking_id}}</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <span class="text-sm">Harga Awal</span>
+                                            <span class="text-sm">No Plat</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">Rp. 10.000</span>
+                                            <span class="text-sm">Rp. {{$data->no_plat}}</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <span class="text-sm">Harga per Jam</span>
+                                            <span class="text-sm">Durasi</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">Rp. 5.000</span>
+                                            <span class="text-sm" id="durasi-waktu">Rp. {{$data->durasi}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-sm">Tanggal Booking</span>
+                                            <span class="text-sm">:</span>
+                                            <span class="text-sm">{{$data->created_at}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-sm">Jam CheckIn</span>
+                                            <span class="text-sm">:</span>
+                                            <span class="text-sm">{{$data->jam_checkin}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-sm">Jam Checkout</span>
+                                            <span class="text-sm">:</span>
+                                            <span class="text-sm">{{$data->jam_checkout}}</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -84,16 +107,43 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <span class="text-sm">Total Slot</span>
+                                            <span class="text-sm">Status Bayar</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">500</span>
+                                            <span class="text-sm">{{$data->status_bayar}}</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <span class="text-sm">Status Tempat Parkir</span>
+                                            <span class="text-sm">Harga Awal</span>
                                             <span class="text-sm">:</span>
-                                            <span class="text-sm">Buka</span>
+                                            <span class="text-sm">{{$data->harga_awal}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-sm">Harga Per Jam</span>
+                                            <span class="text-sm">:</span>
+                                            <span class="text-sm">{{$data->harga_per_jam}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="text-sm">Total Bayar</span>
+                                            <span class="text-sm">:</span>
+                                            <span class="text-sm" id="total-bayar">{{$data->total_bayar}}</span>
+                                        </td>
+                                    </tr>
+                                        <td>
+                                            <span class="text-sm">Metode Bayar</span>
+                                            <span class="text-sm">:</span>
+                                            <span class="text-sm">{{$data->metode_bayar}}</span>
+                                        </td>
+                                    </tr>
+                                    </tr>
+                                        <td>
+                                            <span class="text-sm">Jam Bayar</span>
+                                            <span class="text-sm">:</span>
+                                            <span class="text-sm">{{$data->jam_bayar}}</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -143,5 +193,66 @@
     <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
     <script>
         var player = videojs('my_video');
+    </script>
+    <script>
+        $(document).ready(function () {
+    // Ambil data dari Laravel (format YYYY-MM-DD HH:mm:ss)
+    let checkinTime = "{{ $data->jam_checkin }}" ? new Date("{{ $data->jam_checkin }}").getTime() : null;
+    let bayarTime = "{{ $data->jam_bayar }}" ? new Date("{{ $data->jam_bayar }}").getTime() : null;
+
+    // Ambil harga awal & harga per jam dari Laravel
+    let hargaAwal = parseInt("{{ $data->harga_awal }}") || 0;
+    let hargaPerJam = parseInt("{{ $data->harga_per_jam }}") || 0;
+
+    function updateDurationAndTotal() {
+        let now = new Date().getTime(); // Ambil waktu saat ini
+
+        // Jika belum check-in, tampilkan pesan dan hentikan proses
+        if (!checkinTime) {
+            $("#durasi-waktu").html("00:00:00");
+            $("#total-bayar").html("-");
+            return;
+        }
+
+        // Jika jam_bayar null, hitung sampai sekarang
+        let duration = bayarTime ? (bayarTime - checkinTime) : (now - checkinTime);
+
+        // Jika durasi negatif (check-in di masa depan), tampilkan pesan error
+        if (duration < 0) {
+            $("#durasi-waktu").html("Waktu Check-in Tidak Valid");
+            $("#total-bayar").html("-");
+            return;
+        }
+
+        // Konversi ke jam (dibulatkan ke atas)
+        let totalJam = Math.ceil(duration / (1000 * 60 * 60));
+
+        // Hitung total bayar
+        let totalBayar = hargaAwal + (totalJam * hargaPerJam);
+
+        // Format durasi ke jam:menit:detik
+        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+        let minutes = Math.floor((duration / (1000 * 60)) % 60);
+        let seconds = Math.floor((duration / 1000) % 60);
+
+        // Format angka menjadi 2 digit
+        hours = String(hours).padStart(2, "0");
+        minutes = String(minutes).padStart(2, "0");
+        seconds = String(seconds).padStart(2, "0");
+
+        // Tampilkan hasil
+        $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
+        $("#total-bayar").html(`${totalBayar.toLocaleString("id-ID")}`);
+    }
+
+    // Jalankan update pertama kali
+    updateDurationAndTotal();
+
+    // Update setiap detik jika belum bayar
+    if (!bayarTime) {
+        setInterval(updateDurationAndTotal, 1000);
+    }
+});
+
     </script>
 @endsection

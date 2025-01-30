@@ -117,7 +117,10 @@
                         <h6 class="mb-0">Pantauan</h6>
                     </div>
                     <div class="card-body p-3">
-                        <iframe width="100%" height="515" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
+                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
+                        </video>
+                        {{-- <iframe width="100%" height="515" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> --}}
                     </div>
                 </div>
             </div>
@@ -194,7 +197,6 @@
                                     <th>Jam Checkout</th>
                                     <th>Total Bayar</th>
                                     <th>Metode Bayar</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -212,9 +214,9 @@
                                     <td>{{ $booking['jam_checkout'] }}</td>
                                     <td>{{ $booking['total_bayar'] }}</td>
                                     <td>{{ $booking['metode_bayar'] }}</td>
-                                    <td><button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>
+                                    {{-- <td><button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>
                                         <button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -417,5 +419,10 @@ $('#users').on('click', '.delete-btn', function (e) {
         }
     });
 });
+</script>
+<link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+<script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+<script>
+    var player = videojs('my_video');
 </script>
 @endsection
