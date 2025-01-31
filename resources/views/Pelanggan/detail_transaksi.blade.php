@@ -243,9 +243,14 @@
         seconds = String(seconds).padStart(2, "0");
 
         // Tampilkan hasil
-        if("{{ $data->durasi }}" == "" && "{{ $data->total_bayar }}" == ""){
-            $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
-            $("#total-bayar").html(`${totalBayar}`);
+        if ("{{ !empty($booking) }}")
+        {
+            let durasii = "{{ $booking->durasi ?? '' }}";
+            let totalBayarr = "{{ $booking->total_bayar ?? '' }}";
+            if (durasii === "" && totalBayarr === "") {
+                $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
+                $("#total-bayar").html(`${totalBayar}`);
+            }
         }
     }
 

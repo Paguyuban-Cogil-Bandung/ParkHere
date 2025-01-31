@@ -351,7 +351,9 @@
                     <div class="col-6">
                         <div class="mb-3">
                             <label for="add-place-name" class="form-label text-start">Harga Awal</label><br>
-                            <span class="text-sm">Rp. {{$booking->harga_awal}}</span><br>
+                            @if (!empty($booking))
+                                <span class="text-sm">Rp. {{$booking->harga_awal}}</span><br>
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label for="add-place-name" class="form-label text-start">Plat Nomor</label><br>
@@ -361,7 +363,9 @@
                     <div class="col-6">
                         <div class="mb-3">
                                 <label for="add-place-name" class="form-label text-start">Harga Per Jam</label><br>
+                                @if (!empty($booking))
                                 <span class="text-sm">Rp. {{$booking->harga_per_jam}}</span><br>
+                                @endif
                             </div>
                         <div class="mb-3">
                             <label for="add-place-name" class="form-label text-start">Total Bayar</label><br>
@@ -544,9 +548,14 @@
         seconds = String(seconds).padStart(2, "0");
 
         // Tampilkan hasil
-        if ("{{ $booking->durasi }}" == "" && "{{ $booking->total_bayar }}" == "") {
-            $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
-            $("#total-bayar").html(`${totalBayar}`);
+        if ("{{ !empty($booking) }}")
+        {
+            let durasii = "{{ $booking->durasi ?? '' }}";
+            let totalBayarr = "{{ $booking->total_bayar ?? '' }}";
+            if (durasii === "" && totalBayarr === "") {
+                $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
+                $("#total-bayar").html(`${totalBayar}`);
+            }
         }
     }
 
