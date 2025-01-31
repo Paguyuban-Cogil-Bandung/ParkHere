@@ -11,37 +11,8 @@
 <!-- content -->
 @section('content')
     @include('layout.navbars.auth.topnav', ['title' => 'Detail Transaksi'])
+    
     <div class="container-fluid py-0 pt-0 pb-0 mb-0">
-        <div class="row pb-3">
-            <div class="mb-xl-0">
-                <div class="card">
-                    <div class="card-header pb-0 pt-3 bg-transparent">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <h6 class="text-uppercase text-sm">{{$data->name_place}}</h6>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="text-uppercase text-sm">Pantauan</h6>
-                        </div>
-                    </div>
-                    <div class="card-body pt-3">
-                        {{-- <video id="my_video" class="video-js vjs-default-skin" controls>
-                            <source src="rtsp://192.168.0.88/av0_0&user=admin&password=admin" type="application/x-mpegURL">
-                          </video> --}}
-
-                        {{-- <video id="test_video" controls autoplay>
-                            <source src="rtsp://188.166.234.50:8001/av0_0&user=admin&password=admin">
-                        </video> --}}
-
-
-                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
-                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
-                        </video>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="row pb-3">
             <div class="mb-xl-0">
                 <div class="card">
@@ -153,7 +124,36 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div class="row pb-3">
+            <div class="mb-xl-0">
+                <div class="card">
+                    <div class="card-header pb-0 pt-3 bg-transparent">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <h6 class="text-uppercase text-sm">{{$data->name_place}}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="text-uppercase text-sm">Pantauan</h6>
+                        </div>
+                    </div>
+                    <div class="card-body pt-3">
+                        {{-- <video id="my_video" class="video-js vjs-default-skin" controls>
+                            <source src="rtsp://192.168.0.88/av0_0&user=admin&password=admin" type="application/x-mpegURL">
+                          </video> --}}
+
+                        {{-- <video id="test_video" controls autoplay>
+                            <source src="rtsp://188.166.234.50:8001/av0_0&user=admin&password=admin">
+                        </video> --}}
+
+
+                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
+                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
+                        </video>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
     @include('layout.footers.auth.footer')
     </div>
 @endsection

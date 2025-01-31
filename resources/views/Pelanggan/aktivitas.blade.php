@@ -13,7 +13,7 @@
     @include('layout.navbars.auth.topnav', ['title' => 'Riwayat Aktitas'])
     @if (!empty($bookings))
     @foreach ($bookings as $booking)
-    <div class="container-fluid pt-0 pb-0 mb-0">
+    <div class="container-fluid pt-0 pb-4 mb-0">
         <div class="row w-100">
             <div class="mb-xl-0">
                 <div class="card">
