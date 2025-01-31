@@ -95,4 +95,25 @@ class DashboardController extends Controller
             return response()->json(['error' => 'Terjadi kesalahan: ' . $th->getMessage()], 500);
         }
     }
+    public function bayar(Request $request) {
+        try {
+            DB::beginTransaction();
+
+            $booking = Booking::findOrFail($request->booking_id);
+            $booking->status_bayar = 'Bayar';
+            $booking->jam_bayar = date('Y-m-d H:i:s');
+            $booking->durasi = $request->durasi; 
+            $booking->total_bayar = $request->total_bayar ; 
+            $booking->tambahan_bayar = 0; 
+            $booking->metode_bayar = $request->metode_bayar; 
+            $booking->save();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Berhasil Dibayar'], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['error' => 'Terjadi kesalahan: ' . $th->getMessage()], 500);
+        }
+    }
 }

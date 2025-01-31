@@ -19,7 +19,7 @@
                 <div class="card">
                     <div class="row card-header pb-0 pl-0 pr-0 pt-3 w-100 bg-transparent" style="--bs-gutter-x: 0rem;">
                         <div class="col-6">
-                            <h6 class="text-uppercase text-sm">Transaksi Aktif</h6>
+                            <h6 class="text-uppercase text-sm">{{$booking->name_place}}</h6>
                         </div>
                         <div class="col-6 d-flex justify-content-end">
                             @if ($booking->status_booking == 'Pending') 
@@ -81,9 +81,6 @@
                             <div class="col-lg-6 col-md-12 d-flex justify-content-center justify-content-lg-end">
                                 <div class="d-flex justify-content-center">
                                     <a href="{{url('detail_transaksi/'. $booking->booking_id)}}" class="btn btn-sm btn-info m-1">Detail</a>
-                                    @if ($booking->status_bayar == 'Belum Bayar' && $booking->status_booking != 'Cancelled')
-                                        <a href="" class="btn btn-sm btn-warning m-1">Bayar</a>
-                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -40,6 +40,11 @@
                                                 <span class="text-sm">:</span>
                                                 <span class="text-sm">{{ $booking->booking_id }}</span>
                                             </td>
+                                            <td>
+                                                <span class="text-sm">Tempat Parkir</span>
+                                                <span class="text-sm">:</span>
+                                                <span class="text-sm">{{ $booking->name_place }}</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -61,7 +66,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <span class="text-sm">Total Waktu</span>
+                                                <span class="text-sm">Durasi</span>
                                                 <span class="text-sm">:</span>
                                                 <span class="text-sm" id="durasi-waktu">{{ $booking->durasi }}</span>
                                             </td>
@@ -90,7 +95,7 @@
                                         <a href="{{ url('detail_transaksi/' . $booking->booking_id) }}"
                                             class="btn btn-sm btn-info m-1">Detail</a>
                                         @if ($booking->status_bayar == 'Belum Bayar' && $booking->status_booking != 'Pending')
-                                            <a href="" class="btn btn-sm btn-warning m-1">Bayar</a>
+                                            <button id="Bayar_btn" data-id="{{ $booking->booking_id }}" class="btn btn-sm btn-warning m-1">Bayar</button>
                                         @endif
                                     </div>
                                 </div>
@@ -335,6 +340,82 @@
         });
     </script>
     <script>
+        $(document).on('click', '#Bayar_btn', function() {
+            const Booking_id = $(this).data('id');
+            const durasi = document.getElementById('durasi-waktu').innerText;
+            const total_bayar = document.getElementById('total-bayar').innerText;
+            Swal.fire({
+                title: 'Bayar Booking',
+                html: `
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="add-place-name" class="form-label text-start">Harga Awal</label><br>
+                            <span class="text-sm">Rp. {{$booking->harga_awal}}</span><br>
+                        </div>
+                        <div class="mb-3">
+                            <label for="add-place-name" class="form-label text-start">Plat Nomor</label><br>
+                            <span class="text-sm" id="swal-input-durasi">${durasi}</span><br>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                                <label for="add-place-name" class="form-label text-start">Harga Per Jam</label><br>
+                                <span class="text-sm">Rp. {{$booking->harga_per_jam}}</span><br>
+                            </div>
+                        <div class="mb-3">
+                            <label for="add-place-name" class="form-label text-start">Total Bayar</label><br>
+                            <span class="text-sm text-success" id="swal-input-total-waktu">Rp. ${total_bayar}</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="add-place-name" class="form-label text-start">Metode Bayar*</label>
+                        <select class="form-select" id="swal-input-metode-bayar" required>
+                        <option value="" disabled>Pilih Plat Nomor</option>
+                        <option value="transfer">Transfer</option>
+                        <option value="dipetugas">Di Petugas</option>
+                    </div>
+                </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                preConfirm: () => {
+                    const metode_bayar = document.getElementById('swal-input-metode-bayar').value;
+                    
+                    return {
+                        metode_bayar
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('booking_id', Booking_id);
+                    formData.append('durasi', durasi);
+                    formData.append('total_bayar', total_bayar);
+                    formData.append('metode_bayar', result.value.metode_bayar);
+
+                    $.ajax({
+                        url: '{{ route('parkir.booking.bayar') }}',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Sertakan token CSRF di header
+                        },
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        success: function(response) {
+                            Swal.fire('Berhasil Bayar!', 'Silahkan Ke Gerbang Keluar', 'success');
+                            location.reload();
+                        },
+                        error: function(xhr) {
+                            Swal.fire('Error!', 'Gagal Bayar, Silahkan Coba Lagi.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
         $(document).ready(function() {
     // Ambil status booking dari Laravel
     let statusBooking = "{{ $booking != null ? $booking->status_booking : '' }}";
@@ -450,7 +531,7 @@
         let totalJam = Math.ceil(duration / (1000 * 60 * 60));
 
         // Hitung total bayar
-        let totalBayar = hargaAwal + (totalJam * hargaPerJam);
+        let totalBayar = (hargaAwal - hargaPerJam) + (totalJam * hargaPerJam);
 
         // Format durasi ke jam:menit:detik
         let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
@@ -463,8 +544,10 @@
         seconds = String(seconds).padStart(2, "0");
 
         // Tampilkan hasil
-        $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
-        $("#total-bayar").html(`${totalBayar.toLocaleString("id-ID")}`);
+        if ("{{ $booking->durasi }}" == "" && "{{ $booking->total_bayar }}" == "") {
+            $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
+            $("#total-bayar").html(`${totalBayar}`);
+        }
     }
 
     // Jalankan update pertama kali

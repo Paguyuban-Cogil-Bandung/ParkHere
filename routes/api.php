@@ -18,3 +18,4 @@ Route::post('/parking-place/{id}/update-status', [DashboardController::class, 't
 Route::post('/update-parking-image/{id}', [DashboardController::class, 'updateImage'])->name('updateParkingImage');
 Route::post('/booking', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'booking'])->name('parkir.booking');
 Route::post('/change-booking', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'changeBookingStatus'])->name('parkir.booking.update');
+Route::post('/bayar', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'bayar'])->name('parkir.booking.bayar');

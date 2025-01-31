@@ -23,16 +23,6 @@
                     <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
                         aria-labelledby="dropdownMenuButton">
                         <li class="mb-2">
-                                <a href="" class="dropdown-item border-radius-md">
-                                    <div class="d-flex py-1">
-                                        <h6 class="text-sm mb-1 text-black">
-                                            <i class="fa fa-user me-1"></i>
-                                            <span class="text-black text-sm">Profile</span>
-                                        </h6>
-                                    </div>
-                                </a>
-                        </li>
-                        <li class="mb-2">
                             <form role="form" method="post" action="{{ route('logout') }}">
                             @csrf
                                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item border-radius-md">
