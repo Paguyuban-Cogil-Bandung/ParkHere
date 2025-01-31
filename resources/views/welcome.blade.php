@@ -66,47 +66,57 @@
                             <ul class="navbar-nav mx-auto">
                                 <li class="nav-item">
                                     <a class="nav-link d-flex align-items-center me-2 active" aria-current="page"
-                                        href="">
+                                        href="#">
                                         <i class="fa fa-house opacity-6 text-dark me-1"></i>
                                         Home
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="#tentang-kami">
                                         <i class="fa fa-circle-info opacity-6 text-dark me-1"></i>
                                         Tentang Kami
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="#lokasi">
                                         <i class="fas fa-location-dot opacity-6 text-dark me-1"></i>
                                         Lokasi
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="#pelayanan">
                                         <i class="fas fa-life-ring opacity-6 text-dark me-1"></i>
                                         Pelayanan
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="#kontak">
                                         <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
                                         Kontak
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="#testimoni">
                                         <i class="fas fa-quote-left opacity-6 text-dark me-1"></i>
                                         Testimoni
                                     </a>
                                 </li>
                             </ul>
                             <ul class="navbar-nav d-sm-block sm-mb-2">
+                              @if (Auth::check() == true)
+                                  @if (Auth::user()->usertype == 'admin')
+                                    <a href="{{route('admin.dashboard')}}" class="btn btn-sm mb-0 me-1 btn-primary">Dashboard</a>
+                                  @elseif(Auth::user()->usertype == 'petugas')
+                                    <a href="{{route('petugas.dashboard')}}" class="btn btn-sm mb-0 me-1 btn-primary">Dashboard</a>
+                                  @else
+                                    <a href="{{route('dashboard')}}" class="btn btn-sm mb-0 me-1 btn-primary">Dashboard</a>
+                                  @endif
+                              @else
                                 <li class="nav-item d-flex justify-content-center">
                                     <a href="{{route('login')}}" class="btn btn-sm mb-0 me-1 btn-primary-outline">Login</a>
                                     <a href="{{route('register')}}" class="btn btn-sm mb-0 me-1 btn-primary">Register</a>
                                 </li>
+                              @endif
                             </ul>
                         </div>
                     </div>
@@ -179,7 +189,7 @@
                 </div>
           </section>
       
-          <section class="ftco-section ftco-about">
+          <section class="ftco-section ftco-about" id="tentang-kami">
                   <div class="container">
                       <div class="row no-gutters">
                           <div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url({{ asset('/assets') }}/guest/images/about.jpg);">
@@ -198,7 +208,7 @@
                   </div>
               </section>
 
-              <section class="ftco-section ftco-no-pt bg-light pt-8">
+              <section class="ftco-section ftco-no-pt bg-light pt-8" id="lokasi">
                 <div class="container">
                     <div class="row justify-content-center">
                   <div class="col-md-12 heading-section text-center ftco-animate ">
@@ -257,7 +267,7 @@
                 </div>
             </section>
       
-              <section class="ftco-section">
+              <section class="ftco-section" id="pelayanan">
                   <div class="container">
                       <div class="row justify-content-center mb-5">
                 <div class="col-md-7 text-center heading-section ftco-animate">
@@ -306,7 +316,7 @@
                   </div>
               </section>
       
-              <section class="ftco-section ftco-intro" style="background-image: url({{ asset('/assets') }}/guest/images/bg_3.jpg);">
+              <section class="ftco-section ftco-intro" id="kontak" style="background-image: url({{ asset('/assets') }}/guest/images/bg_3.jpg);">
                   <div class="overlay"></div>
                   <div class="container">
                       <div class="row justify-content-end">
@@ -321,7 +331,7 @@
       
           <section class="ftco-section testimony-section bg-light">
             <div class="container">
-              <div class="row justify-content-center mb-5">
+              <div class="row justify-content-center mb-5" id="testimoni">
                 <div class="col-md-7 text-center heading-section ftco-animate">
                     <span class="subheading">Testimoni</span>
                   <h2 class="mb-3">Pelanggan Yang Senang</h2>
@@ -374,7 +384,7 @@
               <div class="row mb-5">
                 <div class="col-md">
                   <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2"><img src="{{ asset('/assets') }}/guest/images/Logo.png" style="width:17em"></h2>
+                    <h2 class="ftco-heading-2 text-center"><img src="{{ asset('/assets') }}/guest/images/Logo-footer.png" class="rounded" style="width:17em"></h2>
                     <p>ParkHere adalah solusi pintar untuk menemukan dan memesan tempat parkir terdekat. Hemat waktu, hindari stres, dan nikmati pengalaman parkir tanpa ribet</p>
                     <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                       <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>

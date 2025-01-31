@@ -24,48 +24,58 @@
                             <ul class="navbar-nav mx-auto">
                                 <li class="nav-item">
                                     <a class="nav-link d-flex align-items-center me-2 active" aria-current="page"
-                                        href="">
+                                        href="{{route('welcome')}}">
                                         <i class="fa fa-house opacity-6 text-dark me-1"></i>
                                         Home
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="{{route('welcome')}}#tentang-kami">
                                         <i class="fa fa-circle-info opacity-6 text-dark me-1"></i>
-                                        Tentan Kami
+                                        Tentang Kami
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="{{route('welcome')}}#lokasi">
                                         <i class="fas fa-location-dot opacity-6 text-dark me-1"></i>
                                         Lokasi
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="{{route('welcome')}}#pelayanan">
                                         <i class="fas fa-life-ring opacity-6 text-dark me-1"></i>
                                         Pelayanan
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="{{route('welcome')}}#kontak">
                                         <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
                                         Kontak
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link me-2" href="">
+                                    <a class="nav-link me-2" href="{{route('welcome')}}#testimoni">
                                         <i class="fas fa-quote-left opacity-6 text-dark me-1"></i>
                                         Testimoni
                                     </a>
                                 </li>
                             </ul>
                             <ul class="navbar-nav d-sm-block sm-mb-2">
-                                <li class="nav-item d-flex justify-content-center">
-                                    <a href="{{route('login')}}" class="btn btn-sm mb-0 me-1 btn-primary-outline">Login</a>
-                                    <a href="{{route('register')}}" class="btn btn-sm mb-0 me-1 btn-primary">Register</a>
-                                </li>
-                            </ul>
+                                @if (Auth::check() == true)
+                                    @if (Auth::user()->usertype == 'admin')
+                                      <a href="{{route('admin.dashboard')}}" class="btn btn-sm mb-0 me-1 btn-primary">Dashboard</a>
+                                    @elseif(Auth::user()->usertype == 'petugas')
+                                      <a href="{{route('petugas.dashboard')}}" class="btn btn-sm mb-0 me-1 btn-primary">Dashboard</a>
+                                    @else
+                                      <a href="{{route('dashboard')}}" class="btn btn-sm mb-0 me-1 btn-primary">Dashboard</a>
+                                    @endif
+                                @else
+                                  <li class="nav-item d-flex justify-content-center">
+                                      <a href="{{route('login')}}" class="btn btn-sm mb-0 me-1 btn-primary-outline">Login</a>
+                                      <a href="{{route('register')}}" class="btn btn-sm mb-0 me-1 btn-primary">Register</a>
+                                  </li>
+                                @endif
+                              </ul>
                         </div>
                     </div>
                 </nav>
