@@ -12,99 +12,115 @@
 @section('content')
     @include('layout.navbars.auth.topnav', ['title' => 'Dashboard'])
     @if (!empty($booking))
-        <div class="container-fluid pt-0 pb-0 mb-0">
-            <div class="row w-100">
-                <div class="mb-xl-0">
-                    <div class="card">
-                        <div class="row card-header pb-0 pl-0 pr-0 pt-3 w-100 bg-transparent" style="--bs-gutter-x: 0rem;">
+    <div class="container-fluid d-flex justify-content-center align-items-center w-100">
+        <div class="card w-100 p-3">
+            <!-- Card Header -->
+            <div class="card-header bg-transparent py-3 px-3 d-flex align-items-center justify-content-between">
+                <h6 class="text-uppercase text-sm mb-0">Transaksi Aktif</h6>
+                <div class="d-flex align-items-center gap-2">
+                    @if ($booking->status_booking == 'Pending')
+                        <span class="text-sm bg-danger rounded text-white"
+                            style="min-width: 80px; min-height: 32px; padding: 0.375rem 0.75rem; font-size: 0.875rem; line-height: 1.5; display: flex; align-items: center; justify-content: center;">{{ $booking->status_booking }}</span>
+                    @elseif ($booking->status_booking == 'Check In')
+                        <span class="text-sm bg-success rounded text-white"
+                            style="min-width: 80px; min-height: 32px; padding: 0.375rem 0.75rem; font-size: 0.875rem; line-height: 1.5; display: flex; align-items: center; justify-content: center;">{{ $booking->status_booking }}</span>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body py-3 px-3 px-md-0">
+                <div class="row g-2">
+                    <!-- Baris Pertama -->
+                    <div class="col-lg-6 col-md-12">
+                        <div class="row g-2">
+                            <!-- No. Booking -->
                             <div class="col-6">
-                                <h6 class="text-uppercase text-sm">Transaksi Aktif</h6>
-                            </div>
-                            <div class="col-6 d-flex justify-content-end">
-                                @if ($booking->status_booking == 'Pending')
-                                    <span
-                                        class="text-sm bg-danger p-2 rounded text-white">{{ $booking->status_booking }}</span>
-                                @elseif ($booking->status_booking == 'Check In')
-                                    <span
-                                        class="text-sm bg-success p-2 rounded text-white">{{ $booking->status_booking }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="card-body pt-3">
-                            <div class="row">
-                                <div class="col-lg-6 col-md-12">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <span class="text-sm">No. Booking</span>
-                                                <span class="text-sm">:</span>
-                                                <span class="text-sm">{{ $booking->booking_id }}</span>
-                                            </td>
-                                            <td>
-                                                <span class="text-sm">Tempat Parkir</span>
-                                                <span class="text-sm">:</span>
-                                                <span class="text-sm">{{ $booking->name_place }}</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="text-sm">Plat Nomor</span>
-                                                <span class="text-sm">:</span>
-                                                <span class="text-sm">{{ $booking->no_plat }}</span>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <span class="fw-bold text-sm">No. Booking</span>
+                                <div class="bg-light rounded p-2"
+                                    style="min-width: 100px; min-height: 42px; line-height: 1.5;">
+                                    {{ $booking->booking_id }}
                                 </div>
-                                <div class="col-lg-6 col-md-12 d-flex justify-content-between justify-content-lg-end">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <span class="text-sm">Waktu Checkin</span>
-                                                <span class="text-sm">:</span>
-                                                <span class="text-sm">{{ $booking->jam_checkin }}</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="text-sm">Durasi</span>
-                                                <span class="text-sm">:</span>
-                                                <span class="text-sm" id="durasi-waktu">{{ $booking->durasi }}</span>
-                                            </td>
-                                        </tr>
-                                    </table>
+                            </div>
+                            <!-- Plat Nomor -->
+                            <div class="col-6">
+                                <span class="fw-bold text-sm">Plat Nomor</span>
+                                <div class="bg-light rounded p-2"
+                                    style="min-width: 100px; min-height: 42px; line-height: 1.5;">
+                                    {{ $booking->no_plat }}
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer pt-0">
-                            <div class="row" style="--bs-gutter-x: 0rem;">
-                                <div class="col-lg-6 col-md-12 mb-2">
-                                    {{-- <span><span class="text-sm">Total Harga :</span> <b class="text-xl">{{$booking->total_bayar}}</b></span><br> --}}
-                                </div>
-                                <div class="col-lg-6 col-md-12 d-flex justify-content-center mr-4 justify-content-lg-end">
-                                    <span><span class="text-sm">Expire Tme :</span> <b class="text-xl"
-                                            id="countdown-timer">-</b></span><br>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <!-- Tempat Parkir -->
+                        <span class="fw-bold text-sm">Tempat Parkir</span>
+                        <div class="bg-light rounded p-2" style="min-width: 100px; min-height: 42px; line-height: 1.5;">
+                            {{ $booking->name_place }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Baris Kedua -->
+                <div class="row g-2 mt-2">
+                    <div class="col-12">
+                        <div class="row g-2">
+                            <!-- Waktu Checkin -->
+                            <div class="col-6">
+                                <span class="fw-bold text-sm">Waktu Checkin</span>
+                                <div class="bg-light rounded p-2"
+                                    style="min-width: 100%; min-height: 42px; line-height: 1.5;">
+                                    {{ $booking->jam_checkin }}
                                 </div>
                             </div>
-                            <div class="row" style="--bs-gutter-x: 0rem;">
-                                <div class="col-lg-6 col-md-12 mb-2">
-                                    <span><span class="text-sm">Total Harga :</span> <b
-                                            class="text-xl" id="total-bayar">{{ $booking->total_bayar }}</b></span><br>
-                                </div>
-                                <div class="col-lg-6 col-md-12 d-flex justify-content-center justify-content-lg-end">
-                                    <div class="d-flex justify-content-center">
-                                        <a href="{{ url('detail_transaksi/' . $booking->booking_id) }}"
-                                            class="btn btn-sm btn-info m-1">Detail</a>
-                                        @if ($booking->status_bayar == 'Belum Bayar' && $booking->status_booking != 'Pending')
-                                            <button id="Bayar_btn" data-id="{{ $booking->booking_id }}" class="btn btn-sm btn-warning m-1">Bayar</button>
-                                        @endif
-                                    </div>
+                            <!-- Durasi -->
+                            <div class="col-6">
+                                <span class="fw-bold text-sm">Durasi</span>
+                                <div class="bg-light rounded p-2"
+                                    style="min-width: 100%; min-height: 42px; line-height: 1.5;" id="durasi-waktu">
+                                    {{ $booking->durasi }}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Baris Ketiga -->
+                <div class="row g-2 mt-1">
+                    <div class="col-lg-6 col-md-12">
+                        <!-- Total Harga -->
+                        <span class="fw-bold text-sm">Total Harga</span>
+                        <div class="bg-light rounded p-2" style="min-width: 100px; min-height: 42px; line-height: 1.5;">
+                            <b class="text-xl" id="total-bayar">{{ $booking->total_bayar }}</b>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <!-- Expire Time -->
+                        <span class="fw-bold text-sm">Expire Time</span>
+                        <div class="bg-light rounded p-2" style="min-width: 100px; min-height: 42px; line-height: 1.5;">
+                            <b class="text-xl" id="countdown-timer">-</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="card-footer py-3 px-3 px-md-0">
+                <div class="row" style="--bs-gutter-x: 0rem;">
+                    <!-- Action Buttons -->
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <a href="{{ url('detail_transaksi/' . $booking->booking_id) }}"
+                           class="btn btn-sm btn-info m-1"
+                           style="min-width: 80px; min-height: 32px; padding: 0.375rem 0.75rem; font-size: 0.875rem; line-height: 1.5; display: flex; align-items: center; justify-content: center;">Detail</a>
+                        @if ($booking->status_bayar == 'Belum Bayar' && $booking->status_booking != 'Pending')
+                            <button id="Bayar_btn" data-id="{{ $booking->booking_id }}"
+                                class="btn btn-sm btn-warning m-1">Bayar</button>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     @endif
     <div class="container-fluid py-0 pt-4 pb-0 mb-0">
         <div id="parking-list" class="row">
@@ -174,7 +190,7 @@
                                 location.distance = distance / 1000; // Convert to kilometers
                             } else {
                                 location.distance =
-                                null; // Tentukan jarak sebagai null jika data lokasi tidak valid
+                                    null; // Tentukan jarak sebagai null jika data lokasi tidak valid
                             }
                         });
 
@@ -202,8 +218,8 @@
                                     bookingSection = `
                                         <div class="d-flex justify-content-between align-items-center pt-2">
                                             <a href="{{ url('detail_lokasi/' . '${location.place_id}') }}" class="btn btn-warning btn-sm w-100 m-2">Detail</a>
-                                            <button id="Booking_btn" data-id="${location.place_id}" data-harga_awal="${location.harga_awal}" 
-                                                data-harga_per_jam="${location.harga_per_jam}" data-booking_name="${location.name_place}" 
+                                            <button id="Booking_btn" data-id="${location.place_id}" data-harga_awal="${location.harga_awal}"
+                                                data-harga_per_jam="${location.harga_per_jam}" data-booking_name="${location.name_place}"
                                                 class="booking_btn btn btn-success btn-sm w-100 m-2">Booking</button>
                                         </div>`;
                                 } else {
@@ -352,7 +368,7 @@
                         <div class="mb-3">
                             <label for="add-place-name" class="form-label text-start">Harga Awal</label><br>
                             @if (!empty($booking))
-                                <span class="text-sm">Rp. {{$booking->harga_awal}}</span><br>
+                                <span class="text-sm">Rp. {{ $booking->harga_awal }}</span><br>
                             @endif
                         </div>
                         <div class="mb-3">
@@ -364,7 +380,7 @@
                         <div class="mb-3">
                                 <label for="add-place-name" class="form-label text-start">Harga Per Jam</label><br>
                                 @if (!empty($booking))
-                                <span class="text-sm">Rp. {{$booking->harga_per_jam}}</span><br>
+                                <span class="text-sm">Rp. {{ $booking->harga_per_jam }}</span><br>
                                 @endif
                             </div>
                         <div class="mb-3">
@@ -385,7 +401,7 @@
                 showCancelButton: true,
                 preConfirm: () => {
                     const metode_bayar = document.getElementById('swal-input-metode-bayar').value;
-                    
+
                     return {
                         metode_bayar
                     };
@@ -408,7 +424,8 @@
                         contentType: false,
                         data: formData,
                         success: function(response) {
-                            Swal.fire('Berhasil Bayar!', 'Silahkan Ke Gerbang Keluar', 'success');
+                            Swal.fire('Berhasil Bayar!', 'Silahkan Ke Gerbang Keluar',
+                                'success');
                             location.reload();
                         },
                         error: function(xhr) {
@@ -421,152 +438,151 @@
     </script>
     <script>
         $(document).ready(function() {
-    // Ambil status booking dari Laravel
-    let statusBooking = "{{ $booking != null ? $booking->status_booking : '' }}";
+            // Ambil status booking dari Laravel
+            let statusBooking = "{{ $booking != null ? $booking->status_booking : '' }}";
 
-    // Jika status sudah checkin atau checkout, hentikan timer
-    if (statusBooking === "Check In" || statusBooking === "Check Out") {
-        $("#countdown-timer").html("-");
-        return;
-    }
-
-    // Ambil waktu booking dari Laravel (format UTC)
-    let createdAt = "{{ $booking != null ? $booking->created_at : '' }}";
-    
-    if (!createdAt) {
-        $("#countdown-timer").html("Booking Tidak Ditemukan");
-        return;
-    }
-
-    let createdAtTime = new Date(createdAt).getTime();
-    
-    // Hitung batas akhir (2 jam setelah created_at)
-    let expirationTime = createdAtTime + (2 * 60 * 60 * 1000); // 2 jam dalam milidetik
-
-    // Update countdown setiap detik
-    let countdownInterval = setInterval(function() {
-        let now = new Date().getTime();
-        let remainingTime = expirationTime - now;
-
-        // Jika waktu habis, tampilkan alert & update status ke Cancelled
-        if (remainingTime <= 0) {
-            clearInterval(countdownInterval);
-            $("#countdown-timer").html("Waktu Booking Habis!");
-
-            $.ajax({
-                url: '{{ route('parkir.booking.update') }}',
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    booking_id: '{{ $booking != null ? $booking->booking_id : '' }}',
-                    status_booking: 'Cancelled'
-                },
-                success: function(response) {
-                    if (response.error) {
-                        console.error('Gagal update status booking:', response.error);
-                        return;
-                    }
-                    Swal.fire({
-                        title: 'Waktu Habis!',
-                        text: 'Booking Anda telah dibatalkan.',
-                        icon: 'error'
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                },
-                error: function(xhr) {
-                    console.error('Gagal update status booking');
-                }
-            });
-
-            return;
-        }
-
-        // Konversi ke jam, menit, detik
-        let hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
-        let minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
-        let seconds = Math.floor((remainingTime / 1000) % 60);
-
-        // Format angka menjadi 2 digit (misal: 09:05:03)
-        hours = String(hours).padStart(2, "0");
-        minutes = String(minutes).padStart(2, "0");
-        seconds = String(seconds).padStart(2, "0");
-
-        // Tampilkan di HTML
-        $("#countdown-timer").html(`${hours}:${minutes}:${seconds}`);
-
-    }, 1000);
-});
-
-    </script>
-<script>
-    $(document).ready(function () {
-// Ambil data dari Laravel (format YYYY-MM-DD HH:mm:ss)
-    let checkinTime = "{{ $booking ? $booking->jam_checkin : '' }}" ? new Date("{{ $booking ? $booking->jam_checkin : '' }}").getTime() : null;
-    let bayarTime = "{{ $booking ? $booking->jam_bayar : '' }}" ? new Date("{{ $booking ? $booking->jam_bayar : '' }}").getTime() : null;
-
-    // Ambil harga awal & harga per jam dari Laravel
-    let hargaAwal = parseInt("{{ $booking ? $booking->harga_awal : 0 }}") || 0;
-    let hargaPerJam = parseInt("{{ $booking ? $booking->harga_per_jam : 0 }}") || 0;
-
-    function updateDurationAndTotal() {
-        let now = new Date().getTime(); // Ambil waktu saat ini
-
-        // Jika belum check-in, tampilkan pesan dan hentikan proses
-        if (!checkinTime) {
-            $("#durasi-waktu").html("00:00:00");
-            $("#total-bayar").html("-");
-            return;
-        }
-
-        // Jika jam_bayar null, hitung sampai sekarang
-        let duration = bayarTime ? (bayarTime - checkinTime) : (now - checkinTime);
-
-        // Jika durasi negatif (check-in di masa depan), tampilkan pesan error
-        if (duration < 0) {
-            $("#durasi-waktu").html("Waktu Check-in Tidak Valid");
-            $("#total-bayar").html("-");
-            return;
-        }
-
-        // Konversi ke jam (dibulatkan ke atas)
-        let totalJam = Math.ceil(duration / (1000 * 60 * 60));
-
-        // Hitung total bayar
-        let totalBayar = (hargaAwal - hargaPerJam) + (totalJam * hargaPerJam);
-
-        // Format durasi ke jam:menit:detik
-        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-        let minutes = Math.floor((duration / (1000 * 60)) % 60);
-        let seconds = Math.floor((duration / 1000) % 60);
-
-        // Format angka menjadi 2 digit
-        hours = String(hours).padStart(2, "0");
-        minutes = String(minutes).padStart(2, "0");
-        seconds = String(seconds).padStart(2, "0");
-
-        // Tampilkan hasil
-        if ("{{ !empty($booking) }}")
-        {
-            let durasii = "{{ $booking->durasi ?? '' }}";
-            let totalBayarr = "{{ $booking->total_bayar ?? '' }}";
-            if (durasii === "" && totalBayarr === "") {
-                $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
-                $("#total-bayar").html(`${totalBayar}`);
+            // Jika status sudah checkin atau checkout, hentikan timer
+            if (statusBooking === "Check In" || statusBooking === "Check Out") {
+                $("#countdown-timer").html("-");
+                return;
             }
-        }
-    }
 
-    // Jalankan update pertama kali
-    updateDurationAndTotal();
+            // Ambil waktu booking dari Laravel (format UTC)
+            let createdAt = "{{ $booking != null ? $booking->created_at : '' }}";
 
-    // Update setiap detik jika belum bayar
-    if (!bayarTime) {
-        setInterval(updateDurationAndTotal, 1000);
-    }
-    });
+            if (!createdAt) {
+                $("#countdown-timer").html("Booking Tidak Ditemukan");
+                return;
+            }
 
-</script>
+            let createdAtTime = new Date(createdAt).getTime();
+
+            // Hitung batas akhir (2 jam setelah created_at)
+            let expirationTime = createdAtTime + (2 * 60 * 60 * 1000); // 2 jam dalam milidetik
+
+            // Update countdown setiap detik
+            let countdownInterval = setInterval(function() {
+                let now = new Date().getTime();
+                let remainingTime = expirationTime - now;
+
+                // Jika waktu habis, tampilkan alert & update status ke Cancelled
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    $("#countdown-timer").html("Waktu Booking Habis!");
+
+                    $.ajax({
+                        url: '{{ route('parkir.booking.update') }}',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            booking_id: '{{ $booking != null ? $booking->booking_id : '' }}',
+                            status_booking: 'Cancelled'
+                        },
+                        success: function(response) {
+                            if (response.error) {
+                                console.error('Gagal update status booking:', response.error);
+                                return;
+                            }
+                            Swal.fire({
+                                title: 'Waktu Habis!',
+                                text: 'Booking Anda telah dibatalkan.',
+                                icon: 'error'
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function(xhr) {
+                            console.error('Gagal update status booking');
+                        }
+                    });
+
+                    return;
+                }
+
+                // Konversi ke jam, menit, detik
+                let hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
+                let minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
+                let seconds = Math.floor((remainingTime / 1000) % 60);
+
+                // Format angka menjadi 2 digit (misal: 09:05:03)
+                hours = String(hours).padStart(2, "0");
+                minutes = String(minutes).padStart(2, "0");
+                seconds = String(seconds).padStart(2, "0");
+
+                // Tampilkan di HTML
+                $("#countdown-timer").html(`${hours}:${minutes}:${seconds}`);
+
+            }, 1000);
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Ambil data dari Laravel (format YYYY-MM-DD HH:mm:ss)
+            let checkinTime = "{{ $booking ? $booking->jam_checkin : '' }}" ? new Date(
+                "{{ $booking ? $booking->jam_checkin : '' }}").getTime() : null;
+            let bayarTime = "{{ $booking ? $booking->jam_bayar : '' }}" ? new Date(
+                "{{ $booking ? $booking->jam_bayar : '' }}").getTime() : null;
+
+            // Ambil harga awal & harga per jam dari Laravel
+            let hargaAwal = parseInt("{{ $booking ? $booking->harga_awal : 0 }}") || 0;
+            let hargaPerJam = parseInt("{{ $booking ? $booking->harga_per_jam : 0 }}") || 0;
+
+            function updateDurationAndTotal() {
+                let now = new Date().getTime(); // Ambil waktu saat ini
+
+                // Jika belum check-in, tampilkan pesan dan hentikan proses
+                if (!checkinTime) {
+                    $("#durasi-waktu").html("00:00:00");
+                    $("#total-bayar").html("-");
+                    return;
+                }
+
+                // Jika jam_bayar null, hitung sampai sekarang
+                let duration = bayarTime ? (bayarTime - checkinTime) : (now - checkinTime);
+
+                // Jika durasi negatif (check-in di masa depan), tampilkan pesan error
+                if (duration < 0) {
+                    $("#durasi-waktu").html("Waktu Check-in Tidak Valid");
+                    $("#total-bayar").html("-");
+                    return;
+                }
+
+                // Konversi ke jam (dibulatkan ke atas)
+                let totalJam = Math.ceil(duration / (1000 * 60 * 60));
+
+                // Hitung total bayar
+                let totalBayar = (hargaAwal - hargaPerJam) + (totalJam * hargaPerJam);
+
+                // Format durasi ke jam:menit:detik
+                let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+                let minutes = Math.floor((duration / (1000 * 60)) % 60);
+                let seconds = Math.floor((duration / 1000) % 60);
+
+                // Format angka menjadi 2 digit
+                hours = String(hours).padStart(2, "0");
+                minutes = String(minutes).padStart(2, "0");
+                seconds = String(seconds).padStart(2, "0");
+
+                // Tampilkan hasil
+                if ("{{ !empty($booking) }}") {
+                    let durasii = "{{ $booking->durasi ?? '' }}";
+                    let totalBayarr = "{{ $booking->total_bayar ?? '' }}";
+                    if (durasii === "" && totalBayarr === "") {
+                        $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
+                        $("#total-bayar").html(`${totalBayar}`);
+                    }
+                }
+            }
+
+            // Jalankan update pertama kali
+            updateDurationAndTotal();
+
+            // Update setiap detik jika belum bayar
+            if (!bayarTime) {
+                setInterval(updateDurationAndTotal, 1000);
+            }
+        });
+    </script>
 @endsection

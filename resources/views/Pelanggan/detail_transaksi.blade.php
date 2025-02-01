@@ -11,113 +11,120 @@
 <!-- content -->
 @section('content')
     @include('layout.navbars.auth.topnav', ['title' => 'Detail Transaksi'])
-    
+
     <div class="container-fluid py-0 pt-0 pb-0 mb-0">
         <div class="row pb-3">
             <div class="mb-xl-0">
                 <div class="card">
-                    <div class="card-header pb-0 pt-3 bg-transparent">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="text-uppercase text-sm">Detail</h6>
-                            @if ($data->status_booking == 'Check In' AND $data->status_bayar == 'Belum Bayar')
-                                <div>
-                                    <button id="Bayar_btn" data-id="{{ $data->booking_id }}" class="btn btn-sm btn-warning m-1">Bayar</button>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="card-body pt-3">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <!-- Card Header -->
+                    <div class="card-header pb-0 pt-3 bg-transparent d-flex justify-content-between align-items-center">
+                        <h6 class="text-uppercase text-sm">Detail</h6>
+                        @if ($data->status_booking == 'Check In' && $data->status_bayar == 'Belum Bayar')
                             <div>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">ID Booking</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->booking_id}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">No Plat</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">Rp. {{$data->no_plat}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Durasi</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm" id="durasi-waktu">{{$data->durasi}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Tanggal Booking</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->created_at}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Jam CheckIn</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->jam_checkin}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Jam Checkout</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->jam_checkout}}</span>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <button id="Bayar_btn" data-id="{{ $data->booking_id }}" class="btn btn-sm btn-warning m-1">Bayar</button>
                             </div>
-                            <div>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Status Bayar</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->status_bayar}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Harga Awal</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->harga_awal}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Harga Per Jam</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->harga_per_jam}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-sm">Total Bayar</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm" id="total-bayar">{{$data->total_bayar}}</span>
-                                        </td>
-                                    </tr>
-                                        <td>
-                                            <span class="text-sm">Metode Bayar</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->metode_bayar}}</span>
-                                        </td>
-                                    </tr>
-                                    </tr>
-                                        <td>
-                                            <span class="text-sm">Jam Bayar</span>
-                                            <span class="text-sm">:</span>
-                                            <span class="text-sm">{{$data->jam_bayar}}</span>
-                                        </td>
-                                    </tr>
-                                </table>
+                        @endif
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body pt-3">
+                        <!-- Baris 1: ID Booking dan No Plat -->
+                        <div class="row g-2">
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">ID Booking</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->booking_id ?? '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">No Plat</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->no_plat ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Baris 2: Durasi dan Jam CheckIn -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Durasi</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;" id="durasi-waktu">{{ $data->durasi ?? '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Jam CheckIn</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->jam_checkin ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Full Width Field: Tanggal Booking -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-12">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Tanggal Booking</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->created_at ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Baris 3: Jam Checkout dan Status Bayar -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Jam Checkout</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->jam_checkout ?? '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Status Bayar</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->status_bayar ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Baris 4: Harga Awal dan Harga Per Jam -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Harga Awal</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->harga_awal ?? '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Harga Per Jam</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->harga_per_jam ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Baris 5: Total Bayar dan Jam Bayar -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Total Bayar</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;" id="total-bayar">{{ $data->total_bayar ?? '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Jam Bayar</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->jam_bayar ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Full Width Field: Metode Bayar -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-12">
+                                <div class="mb-2">
+                                    <span class="fw-bold text-sm d-block mb-1">Metode Bayar</span>
+                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->metode_bayar ?? '-' }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,19 +143,25 @@
                         </div>
                     </div>
                     <div class="card-body pt-3">
-                        {{-- <video id="my_video" class="video-js vjs-default-skin" controls>
-                            <source src="rtsp://192.168.0.88/av0_0&user=admin&password=admin" type="application/x-mpegURL">
-                          </video> --}}
+                        <!-- Container untuk Video -->
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 col-md-10 col-12">
+                                    <!-- Video Player -->
+                                    <div class="video-container" style="position: relative; padding-bottom: 56.25%; /* 16:9 Aspect Ratio */ height: 0; overflow: hidden;">
+                                        <video id="my_video" class="video-js vjs-default-skin" controls preload="auto" autoplay
+                                               style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
+                                        </video>
 
-                        {{-- <video id="test_video" controls autoplay>
-                            <source src="rtsp://188.166.234.50:8001/av0_0&user=admin&password=admin">
-                        </video> --}}
-
-
-                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
-                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
-                        </video>
-
+                                        <!-- Alternatif RTSP (Dikomentari) -->
+                                        {{-- <video id="test_video" controls autoplay>
+                                            <source src="rtsp://188.166.234.50:8001/av0_0&user=admin&password=admin">
+                                        </video> --}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -305,7 +318,7 @@
                 showCancelButton: true,
                 preConfirm: () => {
                     const metode_bayar = document.getElementById('swal-input-metode-bayar').value;
-                    
+
                     return {
                         metode_bayar
                     };
