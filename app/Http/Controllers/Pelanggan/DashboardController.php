@@ -22,23 +22,23 @@ class DashboardController extends Controller
         $data = ParkingPlace::findOrFail($id);
         return view('Pelanggan.detail_lokasi', compact('data'));
     }
-    public function location(Request $request)  
+    public function location(Request $request)
     {
         $locations = ParkingPlace::select([
-            'place_id', 
-            'name_place', 
-            'status_place', 
-            'image', 
-            'slot_tersedia', 
-            'harga_awal', 
-            'harga_per_jam', 
-            DB::raw("CAST(SUBSTRING_INDEX(lokasi, ',', 1) AS DECIMAL(10,6)) AS latitude"), 
+            'place_id',
+            'name_place',
+            'status_place',
+            'image',
+            'slot_tersedia',
+            'harga_awal',
+            'harga_per_jam',
+            DB::raw("CAST(SUBSTRING_INDEX(lokasi, ',', 1) AS DECIMAL(10,6)) AS latitude"),
             DB::raw("CAST(SUBSTRING_INDEX(lokasi, ',', -1) AS DECIMAL(10,6)) AS longitude")
         ])
         ->whereNotNull('lokasi')
         ->whereIn('status_place', ['Buka', 'Penuh'])
         ->get();
-    
+
         return response()->json($locations);
     }
     public function booking(Request $request)
@@ -102,10 +102,10 @@ class DashboardController extends Controller
             $booking = Booking::findOrFail($request->booking_id);
             $booking->status_bayar = 'Bayar';
             $booking->jam_bayar = date('Y-m-d H:i:s');
-            $booking->durasi = $request->durasi; 
-            $booking->total_bayar = $request->total_bayar ; 
-            $booking->tambahan_bayar = 0; 
-            $booking->metode_bayar = $request->metode_bayar; 
+            $booking->durasi = $request->durasi;
+            $booking->total_bayar = $request->total_bayar ;
+            $booking->tambahan_bayar = 0;
+            $booking->metode_bayar = $request->metode_bayar;
             $booking->save();
 
             DB::commit();

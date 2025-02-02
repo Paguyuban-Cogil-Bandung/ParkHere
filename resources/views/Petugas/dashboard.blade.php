@@ -205,6 +205,7 @@
                         <table id="booking" class="table align-items-center mb-0">
                             <thead>
                                 <tr>
+                                    <th>Aksi</th>
                                     <th>ID Booking</th>
                                     <th>Nama User</th>
                                     <th>No Plat</th>
@@ -222,6 +223,8 @@
                             <tbody>
                                 @foreach ($bookings as $booking)
                                     <tr>
+                                        <td><button id="checkin_btn" data-id="{{ $booking['booking_id'] }}" data-place-id="{{ $booking['place_id'] }}" class="checkin_btn btn btn-success">Check In</button>
+                                            <button id="checkout_btns" data-id="{{ $booking['booking_id'] }}" data-place-id="{{ $booking['place_id'] }}"class="checkout_btn btn btn-danger">Check Out</button></td>
                                         <td>{{ $booking['booking_id'] }}</td>
                                         <td>{{ $booking['name_user'] }}</td>
                                         <td>{{ $booking['no_plat'] }}</td>
@@ -253,6 +256,99 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Check In Button
+        $('.checkin_btn').on('click', function() {
+            let bookingId = $(this).data('id');
+            let placeId = $(this).data('place-id');
+            console.log(bookingId, placeId)
+            // Show SweetAlert confirm dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to check in this booking?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Check In!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // AJAX Request to Controller (Check In)
+                    $.ajax({
+                        url: '{{ route('parkir.booking.checkin') }}',  // Change this to the correct URL
+                        method: 'POST',
+                        data: {
+                            booking_id: bookingId,
+                            place_id: placeId,
+                            _token: '{{ csrf_token() }}'  // CSRF token for security
+                        },
+                        success: function(response) {
+                            // Show success message with SweetAlert
+                            Swal.fire(
+                                'Checked In!',
+                                response.message,
+                                'success'
+                            );
+                        },
+                        error: function(xhr, status, error) {
+                            // Show error message with SweetAlert
+                            Swal.fire(
+                                'Error!',
+                                'Something went wrong: ' + xhr.responseJSON.error,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+
+        // Check Out Button
+        $('.checkout_btn').on('click', function() {
+            let bookingId = $(this).data('id');
+            let placeId = $(this).data('place-id');
+
+            // Show SweetAlert confirm dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to check out this booking?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Check Out!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // AJAX Request to Controller (Check Out)
+                    $.ajax({
+                        url: '{{ route('parkir.booking.checkout') }}',  // Change this to the correct URL
+                        method: 'POST',
+                        data: {
+                            booking_id: bookingId,
+                            place_id: placeId,
+                            _token: '{{ csrf_token() }}'  // CSRF token for security
+                        },
+                        success: function(response) {
+                            // Show success message with SweetAlert
+                            Swal.fire(
+                                'Checked Out!',
+                                response.message,
+                                'success'
+                            );
+                        },
+                        error: function(xhr, status, error) {
+                            // Show error message with SweetAlert
+                            Swal.fire(
+                                'Error!',
+                                'Something went wrong: ' + xhr.responseJSON.error,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             function handleEmergency(buttonId, action, device, state) {

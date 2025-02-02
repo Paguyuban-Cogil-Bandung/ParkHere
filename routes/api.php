@@ -19,3 +19,5 @@ Route::post('/update-parking-image/{id}', [DashboardController::class, 'updateIm
 Route::post('/booking', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'booking'])->name('parkir.booking');
 Route::post('/change-booking', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'changeBookingStatus'])->name('parkir.booking.update');
 Route::post('/bayar', [\App\Http\Controllers\Pelanggan\DashboardController::class, 'bayar'])->name('parkir.booking.bayar');
+Route::post('/parkir/checkin', [DashboardController::class, 'checkin'])->name('parkir.booking.checkin');
+Route::post('/parkir/checkout', [DashboardController::class, 'checkout'])->name('parkir.booking.checkout');
