@@ -372,7 +372,7 @@
                             @endif
                         </div>
                         <div class="mb-3">
-                            <label for="add-place-name" class="form-label text-start">Plat Nomor</label><br>
+                            <label for="add-place-name" class="form-label text-start">Durasi</label><br>
                             <span class="text-sm" id="swal-input-durasi">${durasi}</span><br>
                         </div>
                     </div>

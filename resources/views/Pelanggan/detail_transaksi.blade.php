@@ -49,7 +49,7 @@
                             <div class="col-md-6 col-6">
                                 <div class="mb-2">
                                     <span class="fw-bold text-sm d-block mb-1">Durasi</span>
-                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;" id="durasi-waktu">{{ $data->durasi ?? '-' }}</div>
+                                    <div id="durasi-waktu" class="durasi-waktu bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->durasi}}</div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-6">
@@ -107,7 +107,7 @@
                             <div class="col-md-6 col-6">
                                 <div class="mb-2">
                                     <span class="fw-bold text-sm d-block mb-1">Total Bayar</span>
-                                    <div class="bg-light rounded p-2" style="min-height: 42px; min-width: 100%;" id="total-bayar">{{ $data->total_bayar ?? '-' }}</div>
+                                    <div id="total-bayar" class="total-bayar bg-light rounded p-2" style="min-height: 42px; min-width: 100%;">{{ $data->total_bayar}}</div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-6">
@@ -150,7 +150,7 @@
                                     <!-- Video Player -->
                                     <div class="video-container" style="position: relative; padding-bottom: 56.25%; /* 16:9 Aspect Ratio */ height: 0; overflow: hidden;">
                                         <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay style="height: 25em;">
-                                            <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL">
+                                            {{-- <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL"> --}}
                                         </video>
 
                                         {{-- <iframe src="https://hls-cam.ourproject.my.id" frameborder="0"></iframe> --}}
@@ -212,71 +212,65 @@
     </script>
     <script>
         $(document).ready(function () {
-    // Ambil data dari Laravel (format YYYY-MM-DD HH:mm:ss)
-    let checkinTime = "{{ $data->jam_checkin }}" ? new Date("{{ $data->jam_checkin }}").getTime() : null;
-    let bayarTime = "{{ $data->jam_bayar }}" ? new Date("{{ $data->jam_bayar }}").getTime() : null;
-
-    // Ambil harga awal & harga per jam dari Laravel
-    let hargaAwal = parseInt("{{ $data->harga_awal }}") || 0;
-    let hargaPerJam = parseInt("{{ $data->harga_per_jam }}") || 0;
-
-    function updateDurationAndTotal() {
-        let now = new Date().getTime(); // Ambil waktu saat ini
-
-        // Jika belum check-in, tampilkan pesan dan hentikan proses
-        if (!checkinTime) {
-            $("#durasi-waktu").html("00:00:00");
-            $("#total-bayar").html("-");
-            return;
-        }
-
-        // Jika jam_bayar null, hitung sampai sekarang
-        let duration = bayarTime ? (bayarTime - checkinTime) : (now - checkinTime);
-
-        // Jika durasi negatif (check-in di masa depan), tampilkan pesan error
-        if (duration < 0) {
-            $("#durasi-waktu").html("Waktu Check-in Tidak Valid");
-            $("#total-bayar").html("-");
-            return;
-        }
-
-        // Konversi ke jam (dibulatkan ke atas)
-        let totalJam = Math.ceil(duration / (1000 * 60 * 60));
-
-        // Hitung total bayar
-        let totalBayar = (hargaAwal - hargaPerJam) + (totalJam * hargaPerJam);
-
-        // Format durasi ke jam:menit:detik
-        let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-        let minutes = Math.floor((duration / (1000 * 60)) % 60);
-        let seconds = Math.floor((duration / 1000) % 60);
-
-        // Format angka menjadi 2 digit
-        hours = String(hours).padStart(2, "0");
-        minutes = String(minutes).padStart(2, "0");
-        seconds = String(seconds).padStart(2, "0");
-
-        // Tampilkan hasil
-        if ("{{ !empty($booking) }}")
-        {
-            let durasii = "{{ $booking->durasi ?? '' }}";
-            let totalBayarr = "{{ $booking->total_bayar ?? '' }}";
-            if (durasii === "" && totalBayarr === "") {
-                $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
-                $("#total-bayar").html(`${totalBayar}`);
+            // Ambil data dari Laravel dengan format JSON agar valid
+            let checkinTime = @json($data->jam_checkin) ? new Date(@json($data->jam_checkin)).getTime() : null;
+            let bayarTime = @json($data->jam_bayar) ? new Date(@json($data->jam_bayar)).getTime() : null;
+        
+            let hargaAwal = parseInt(@json($data->harga_awal)) || 0;
+            let hargaPerJam = parseInt(@json($data->harga_per_jam)) || 0;
+        
+            function updateDurationAndTotal() {
+                let now = new Date().getTime(); // Waktu saat ini
+        
+                // Jika tidak ada waktu check-in, tampilkan default
+                if (!checkinTime || isNaN(checkinTime)) {
+                    $("#durasi-waktu").text("00:00:00");
+                    $("#total-bayar").text("-");
+                    return;
+                }
+        
+                // Hitung durasi, jika `jam_bayar` ada maka gunakan itu sebagai batas akhir
+                let duration = bayarTime ? (bayarTime - checkinTime) : (now - checkinTime);
+        
+                // Jika durasi negatif (error), hentikan perhitungan
+                if (duration < 0) {
+                    $("#durasi-waktu").text("Waktu Check-in Tidak Valid");
+                    $("#total-bayar").text("-");
+                    return;
+                }
+        
+                // Konversi durasi ke jam, menit, dan detik
+                let totalJam = Math.ceil(duration / (1000 * 60 * 60));
+                let totalBayar = (hargaAwal - hargaPerJam) + (totalJam * hargaPerJam); // Perbaikan perhitungan
+        
+                let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+                let minutes = Math.floor((duration / (1000 * 60)) % 60);
+                let seconds = Math.floor((duration / 1000) % 60);
+        
+                hours = String(hours).padStart(2, "0");
+                minutes = String(minutes).padStart(2, "0");
+                seconds = String(seconds).padStart(2, "0");
+        
+                // Update tampilan
+                if ("{{ !empty($data) }}") {
+                    let durasii = "{{ $data->durasi ?? '' }}";
+                    let totalBayarr = "{{ $data->total_bayar ?? '' }}";
+                    if (durasii === "" && totalBayarr === "") {
+                        $("#durasi-waktu").html(`${hours}:${minutes}:${seconds}`);
+                        $("#total-bayar").html(`${totalBayar}`);
+                    }
+                }
             }
-        }
-    }
-
-    // Jalankan update pertama kali
-    updateDurationAndTotal();
-
-    // Update setiap detik jika belum bayar
-    if (!bayarTime) {
-        setInterval(updateDurationAndTotal, 1000);
-    }
-});
-    </script>
+        
+            // Jalankan saat halaman dimuat
+            updateDurationAndTotal();
+        
+            // Jalankan setiap detik jika belum bayar
+            if (!bayarTime) {
+                setInterval(updateDurationAndTotal, 1000);
+            }
+        });
+        </script>
     <script>
         $(document).on('click', '#Bayar_btn', function() {
             const Booking_id = $(this).data('id');
@@ -292,7 +286,7 @@
                             <span class="text-sm">Rp. {{$data->harga_awal}}</span><br>
                         </div>
                         <div class="mb-3">
-                            <label for="add-place-name" class="form-label text-start">Plat Nomor</label><br>
+                            <label for="add-place-name" class="form-label text-start">Durasi</label><br>
                             <span class="text-sm" id="swal-input-durasi">${durasi}</span><br>
                         </div>
                     </div>

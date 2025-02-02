@@ -96,7 +96,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Transaksi Hari Ini</p>
                                     <h6 class="font-weight-bolder">
-                                        {{ $total_transaksi_today }}
+                                        Rp{{ number_format($total_transaksi_today, 0, ',', '.') }}
                                     </h6>
                                 </div>
                             </div>
@@ -207,12 +207,11 @@
                                 <tr>
                                     <th>Aksi</th>
                                     <th>ID Booking</th>
-                                    <th>Nama User</th>
                                     <th>No Plat</th>
-                                    <th>Total Jam Parkir</th>
-                                    <th>Total Bayar</th>
                                     <th>Status Booking</th>
                                     <th>Status Bayar</th>
+                                    <th>Nama User</th>
+                                    <th>Durasi</th>
                                     <th>Jam Checkin</th>
                                     <th>Jam Bayar</th>
                                     <th>Jam Checkout</th>
@@ -223,23 +222,31 @@
                             <tbody>
                                 @foreach ($bookings as $booking)
                                     <tr>
-                                        <td><button id="checkin_btn" data-id="{{ $booking['booking_id'] }}" data-place-id="{{ $booking['place_id'] }}" class="checkin_btn btn btn-success">Check In</button>
-                                            <button id="checkout_btns" data-id="{{ $booking['booking_id'] }}" data-place-id="{{ $booking['place_id'] }}"class="checkout_btn btn btn-danger">Check Out</button></td>
+                                        <td>
+                                            @if ($booking['status_booking'] != 'cancelled' && $booking['status_booking'] != 'Check Out')
+                                                @if ($booking['status_booking'] == 'Pending')
+                                                    <button id="checkin_btn" data-id="{{ $booking['booking_id'] }}" data-place-id="{{ $booking['place_id'] }}" class="checkin_btn btn btn-success">Check In</button>
+                                                @elseif ($booking['status_booking'] == 'Check In' && $booking['status_bayar'] == 'Bayar')
+                                                    <button id="checkout_btn" data-id="{{ $booking['booking_id'] }}" data-place-id="{{ $booking['place_id'] }}" class="checkout_btn btn btn-danger">Check Out</button>
+                                                @else
+                                                    -
+                                                @endif
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        
                                         <td>{{ $booking['booking_id'] }}</td>
-                                        <td>{{ $booking['name_user'] }}</td>
                                         <td>{{ $booking['no_plat'] }}</td>
-                                        <td>{{ $booking['durasi'] }}</td>
-                                        <td>{{ $booking['total_bayar'] }}</td>
                                         <td>{{ $booking['status_booking'] }}</td>
                                         <td>{{ $booking['status_bayar'] }}</td>
+                                        <td>{{ $booking['name_user'] }}</td>
+                                        <td>{{ $booking['durasi'] }}</td>
                                         <td>{{ $booking['jam_checkin'] }}</td>
                                         <td>{{ $booking['jam_bayar'] }}</td>
                                         <td>{{ $booking['jam_checkout'] }}</td>
-                                        <td>{{ $booking['total_bayar'] }}</td>
+                                        <td>{{ number_format($booking['total_bayar'], 0, ',', '.') }}</td>
                                         <td>{{ $booking['metode_bayar'] }}</td>
-                                        {{-- <td><button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>
-                                        <button class="delete-btn btn btn-danger btn-sm" data-id="${data.id}" data-name="${data.name}">Delete <i class="fe fe-delete"></i></button>
-                                    </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -289,6 +296,7 @@
                                 response.message,
                                 'success'
                             );
+                            location.reload();
                         },
                         error: function(xhr, status, error) {
                             // Show error message with SweetAlert
@@ -335,6 +343,7 @@
                                 response.message,
                                 'success'
                             );
+                            location.reload();
                         },
                         error: function(xhr, status, error) {
                             // Show error message with SweetAlert
