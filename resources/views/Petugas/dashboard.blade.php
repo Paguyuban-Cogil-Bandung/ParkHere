@@ -119,7 +119,7 @@
                     </div>
                     <div class="card-body p-3">
                         <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
-                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
+                            <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL">
                         </video>
                         {{-- <iframe width="100%" height="515" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> --}}
                     </div>

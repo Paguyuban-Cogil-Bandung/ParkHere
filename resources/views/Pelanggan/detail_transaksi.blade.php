@@ -149,10 +149,11 @@
                                 <div class="col-lg-8 col-md-10 col-12">
                                     <!-- Video Player -->
                                     <div class="video-container" style="position: relative; padding-bottom: 56.25%; /* 16:9 Aspect Ratio */ height: 0; overflow: hidden;">
-                                        <video id="my_video" class="video-js vjs-default-skin" controls preload="auto" autoplay
-                                               style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                                            <source src="http://188.166.234.50:8002" type="application/x-mpegURL">
+                                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
+                                            <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL">
                                         </video>
+
+                                        {{-- <iframe src="https://hls-cam.ourproject.my.id" frameborder="0"></iframe> --}}
 
                                         <!-- Alternatif RTSP (Dikomentari) -->
                                         {{-- <video id="test_video" controls autoplay>
