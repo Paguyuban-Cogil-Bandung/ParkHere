@@ -149,7 +149,7 @@
                                 <div class="col-lg-8 col-md-10 col-12">
                                     <!-- Video Player -->
                                     <div class="video-container" style="position: relative; padding-bottom: 56.25%; /* 16:9 Aspect Ratio */ height: 0; overflow: hidden;">
-                                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
+                                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay style="height: 25em;">
                                             <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL">
                                         </video>
 

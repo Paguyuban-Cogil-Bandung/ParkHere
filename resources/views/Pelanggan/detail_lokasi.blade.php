@@ -25,7 +25,7 @@
                     </div>
                     <div class="card-body pt-3">
                         <div class="video-container" style="overflow: hidden;">
-                            <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay>
+                            <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay style="height: 25em;">
                                 <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL">
                             </video>
                             <!-- Alternatif iframe -->
