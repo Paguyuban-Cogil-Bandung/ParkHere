@@ -30,23 +30,17 @@ DB_PASSWORD      : 8HhEW2Z5yD63iCx4
 ## Task Menu
 ### 1. Admin
 - [x] Admin Dashboard
-- [ ] Kelola Pengguna
-- [ ] Kelola Tempat Parkir
-- [ ] Laporan Transaksi
-- [ ] Update Profile
+- [x] Kelola Pengguna
+- [x] Kelola Tempat Parkir
+- [x] Laporan Transaksi
 
 ### 2. Petugas
 - [x] Petugas Dashboard
-- [ ] Scan QR In And OUt
-- [ ] List Booking
-- [ ] Laporan Booking
-- [ ] Update Profile
+- [x] Laporan Transaksi
       
 ### 3. Pelanggan
 - [x] Pelanggan Dashboard
-- [ ] Scan QR In And OUt
-- [ ] Aktivitas
-- [ ] Update Profile
+- [x] Riwatat Aktivitas
 
 ## Project Team
 1. Edwin Liona Jaya - AI
