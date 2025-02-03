@@ -149,16 +149,12 @@
                                 <div class="col-lg-8 col-md-10 col-12">
                                     <!-- Video Player -->
                                     <div class="video-container" style="position: relative; padding-bottom: 56.25%; /* 16:9 Aspect Ratio */ height: 0; overflow: hidden;">
-                                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay style="height: 25em;">
-                                            {{-- <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL"> --}}
-                                        </video>
-
-                                        {{-- <iframe src="https://hls-cam.ourproject.my.id" frameborder="0"></iframe> --}}
-
-                                        <!-- Alternatif RTSP (Dikomentari) -->
-                                        {{-- <video id="test_video" controls autoplay>
-                                            <source src="rtsp://188.166.234.50:8001/av0_0&user=admin&password=admin">
-                                        </video> --}}
+                                        <img src="https://hls-cam.ourproject.my.id/video_feed" class="w-100" alt="" id="video_feed">
+                                        <script>
+                                            setInterval(function() {
+                                                document.getElementById('video_feed').src = 'https://hls-cam.ourproject.my.id/video_feed?' + new Date().getTime();
+                                            }, 5000);
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -203,12 +199,6 @@
                 alert('Geolocation is not supported by your browser.');
             }
         });
-    </script>
-    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
-
-    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
-    <script>
-        var player = videojs('my_video');
     </script>
     <script>
         $(document).ready(function () {

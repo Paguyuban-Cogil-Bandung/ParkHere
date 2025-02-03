@@ -115,13 +115,52 @@
             <div class="col-lg-8 mt-4">
                 <div class="card">
                     <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">Pantauan</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <h6 class="mb-0">Pantauan</h6>
+                            </div>
+                            <div class="col-6 d-flex justify-content-end">
+                                <button id="restartButton" class="btn btn-primary mx-2">Restart</button>
+                                {{-- <button id="refreshButton" class="btn btn-primary">Refresh</button> --}}
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body p-3">
-                        <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay style="height: 25em;">
+                        {{-- <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay style="height: 25em;">
                             <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL">
-                        </video>
-                        {{-- <iframe width="100%" height="515" src="https://www.youtube.com/embed/xpgiCNO1uAA?si=NSzZG5VJBHuSzkep" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> --}}
+                        </video> --}}
+                        <img src="https://hls-cam.ourproject.my.id/video_feed" class="w-100" alt="" id="video_feed">
+                        
+                        <script>
+                            setInterval(() => {
+                                document.getElementById('video_feed').src = 'https://hls-cam.ourproject.my.id/video_feed?' + new Date().getTime();
+                            }, 10000);
+                            // document.getElementById('refreshButton').addEventListener('click', function() {
+                            // })
+                            document.getElementById('restartButton').addEventListener('click', function() {
+                                fetch('https://hls-cam.ourproject.my.id/restart', {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                })
+                                .then(data => {
+                                    // console.log(data);
+                                    if (data.status === 200) {
+                                        console.log("Berhasil refresh");
+                                        Swal.fire("Berhasil!", "Stream telah diperbarui.", "success");
+                                    } else {
+                                        console.log("Gagal refresh");
+                                        Swal.fire("Gagal!", "Terjadi kesalahan.", "error");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error:", error);
+                                    Swal.fire("Error!", "Terjadi kesalahan: " + error.message, "error");
+                                });
+                            });
+                        </script>                        
+                        {{-- <iframe class="w-100" src="https://hls-cam.ourproject.my.id/video_feed" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> --}}
                     </div>
                 </div>
             </div>
@@ -572,9 +611,9 @@
             });
         });
     </script>
-    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+    {{-- <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
     <script>
         var player = videojs('my_video');
-    </script>
+    </script> --}}
 @endsection

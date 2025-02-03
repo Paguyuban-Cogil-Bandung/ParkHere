@@ -25,11 +25,12 @@
                     </div>
                     <div class="card-body pt-3">
                         <div class="video-container" style="overflow: hidden;">
-                            <video id="my_video" class="video-js vjs-default-skin w-100" controls preload="auto" autoplay style="height: 25em;">
-                                <source src="https://hls-cam.ourproject.my.id" type="application/x-mpegURL">
-                            </video>
-                            <!-- Alternatif iframe -->
-                            {{-- <iframe width="100%" height="315" src="{{ $data->url_stream }}" allowfullscreen style="height: auto; max-height: 500px;"></iframe> --}}
+                            <img src="https://hls-cam.ourproject.my.id/video_feed" class="w-100" alt="" id="video_feed">
+                        <script>
+                            setInterval(function() {
+                                document.getElementById('video_feed').src = 'https://hls-cam.ourproject.my.id/video_feed?' + new Date().getTime();
+                            }, 5000);
+                        </script>
                         </div>
                     </div>
                 </div>
@@ -136,11 +137,6 @@
                 alert('Geolocation is not supported by your browser.');
             }
         });
-    </script>
-    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
-    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
-    <script>
-        var player = videojs('my_video');
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

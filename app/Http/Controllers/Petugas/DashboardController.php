@@ -105,7 +105,7 @@ class DashboardController extends Controller
 
                 // Update tempat parkir
                 $place = ParkingPlace::findOrFail($booking->place_id);
-                $place->slot_tersedia = max(0, $place->slot_tersedia - 1);  // Pastikan tidak negatif
+                $place->slot_tersedia = $place->slot_tersedia - 1;  // Pastikan tidak negatif
                 $place->save();
 
                 // Kirim request ke API parkir
@@ -117,6 +117,20 @@ class DashboardController extends Controller
                         'state' => 1
                     ])
                 ]);
+
+                // proses background, untuk request ke API parkir untuk tutup gerbang tutup gerbang, setelah 8 detik
+                dispatch(function () {
+                    sleep(8);
+                    Http::get('https://parkhere-backend.ourproject.my.id/mqtt', [
+                        'topic' => 'parking/action',
+                        'message' => json_encode([
+                            'type' => 'action',
+                            'device' => 'SRV1',
+                            'state' => 0
+                        ])
+                    ]);
+                })->afterResponse();
+
 
                 // Jika API gagal, lempar exception agar transaksi di-rollback
                 if (!$response->successful()) {
@@ -141,11 +155,11 @@ class DashboardController extends Controller
 
                 // Update tempat parkir
                 $place = ParkingPlace::findOrFail($booking->place_id);
-                $place->slot_tersedia = max(0, $place->slot_tersedia + 1); // Pastikan tidak negatif
-                $place->jumlah_booking = max(0, $place->jumlah_booking - 1); // Pastikan tidak negatif
+                $place->slot_tersedia = $place->slot_tersedia + 1; // Pastikan tidak negatif
+                $place->jumlah_booking = $place->jumlah_booking - 1; // Pastikan tidak negatif
                 $place->save();
 
-                // Kirim request ke API parkir
+                // Kirim request ke API parkir untuk buka gerbang
                 $response = Http::get('https://parkhere-backend.ourproject.my.id/mqtt', [
                     'topic' => 'parking/action',
                     'message' => json_encode([
@@ -154,6 +168,19 @@ class DashboardController extends Controller
                         'state' => 1
                     ])
                 ]);
+
+                // proses background, untuk request ke API parkir untuk tutup gerbang tutup gerbang, setelah 8 detik
+                dispatch(function () {
+                    sleep(8);
+                    Http::get('https://parkhere-backend.ourproject.my.id/mqtt', [
+                        'topic' => 'parking/action',
+                        'message' => json_encode([
+                            'type' => 'action',
+                            'device' => 'SRV2',
+                            'state' => 0
+                        ])
+                    ]);
+                })->afterResponse();
 
                 // Jika API gagal, lempar exception untuk rollback
                 if (!$response->successful()) {
