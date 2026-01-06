@@ -50,4 +50,7 @@ DB_PASSWORD      : 8HhEW2Z5yD63iCx4
 5. Ilmi Fatturahman - IOT
 6. Rafly Z - IOT
 
+### Alur Proses
+<img src="./resources/assets/parkhere.png" width="400" alt="Laravel Logo"></a></p>
+
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
